@@ -38,12 +38,13 @@ public class Message implements Serializable {
     }
 
     @Override
-    public String serialize() {
-        return this.content + Serializable.SEPARATOR + this.timestamp;
+    public byte[] serialize() {
+        return (this.content + Serializable.SEPARATOR + this.timestamp).getBytes();
     }
 
     @Override
-    public void unserialize(String string) {
+    public void unserialize(byte[] bytes) {
+        String string = new String(bytes);
         String[] result = string.split(Serializable.SEPARATOR+"(?!.*"+Serializable.SEPARATOR+")");
         System.out.println(result.length);
         System.out.println(result[0]);
