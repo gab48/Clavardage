@@ -1,29 +1,27 @@
 package Models;
 
+import Network.Utils.Address;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public class User {
 
     private int id;
-    private InetAddress addr;
+    private Address addr;
     private String nickname;
 
-    public User() {
-        try {
-            this.addr = InetAddress.getLocalHost();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-            // Manually set IP address
-        }
-    }
-
-    public User(InetAddress addr, String nickname) {
-        this.addr = addr;
+    public User(String nickname, Address addr) {
         this.nickname = nickname;
+        this.addr = addr;
     }
 
-    public InetAddress getAddr() {
+    public User(String nickname) {
+        this.nickname = nickname;
+        this.addr = Address.getMyIP();
+    }
+
+    public Address getAddr() {
         return addr;
     }
     public String getNickname() {
@@ -32,5 +30,14 @@ public class User {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", addr=" + addr +
+                ", nickname='" + nickname + '\'' +
+                '}';
     }
 }

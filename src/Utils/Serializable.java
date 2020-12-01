@@ -2,8 +2,8 @@ package Utils;
 
 public interface Serializable {
 
-    public static String SEPARATOR = ",";
+    String SEPARATOR = ",";
 
-    public String serialize();
-    public void unserialize(String string);
+    byte[] serialize();
+    void unserialize(byte[] bytes);
 }
