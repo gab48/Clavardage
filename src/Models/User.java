@@ -18,6 +18,11 @@ public class User {
         }
     }
 
+    public User(InetAddress addr, String nickname) {
+        this.addr = addr;
+        this.nickname = nickname;
+    }
+
     public InetAddress getAddr() {
         return addr;
     }

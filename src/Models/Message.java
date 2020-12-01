@@ -2,6 +2,7 @@ package Models;
 
 import Utils.Serializable;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Message implements Serializable {
@@ -27,6 +28,12 @@ public class Message implements Serializable {
 
     public Long getTimestamp() {
         return timestamp;
+    }
+
+    public String getTime() {
+        Date date = new Date(this.getTimestamp());
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+        return formatter.format(date);
     }
 
     @Override
