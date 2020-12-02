@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.event.*;
 
 public class ConversationWindow {
-    private static final String MESSAGE_TEXT_FIELD_PLACEHOLDER = "Type a message...";
+    private static final String SEND_TEXT_FIELD_PLACEHOLDER = "Type a message...";
 
     private JPanel entireWindowPanel;
     private JTextArea conversationTextArea;
@@ -17,19 +17,23 @@ public class ConversationWindow {
     private final User localUser;
     private final User remoteUser;
 
-    private void appendMessage(String from, Message message) {
+    private boolean defaultText;
 
+    private void appendMessage(String from, Message message) {
         conversationTextArea.append("[" + message.getTime() + "] <" + from + "> " + message.getContent() + "\n");
     }
 
     private void sendMessage() {
-        Message message = new Message(sendTextField.getText());
+        String content = sendTextField.getText();
 
-        //TODO: Never trust user input
+        //TODO: Never trust user input (more precisely than empty messages?)
+        if (content.length() > 0 && !defaultText) {
+            Message message = new Message(content);
+            appendMessage(localUser.getNickname(), message);
+            sendTextField.setText("");
 
-        appendMessage(localUser.getNickname(), message);
-
-        //TODO: Really send the message (notify a listener?)
+            //TODO: Really send the message (notify a listener?)
+        }
     }
 
     public ConversationWindow(User localUser, User remoteUser) {
@@ -38,6 +42,8 @@ public class ConversationWindow {
         JFrame frame = new JFrame(remoteUser.getNickname());
 
         sendTextField.setText("Type a message...");
+        defaultText = true;
+
         sendButton.setText("Send");
         sendButton.setMnemonic(KeyEvent.VK_ENTER);
 
@@ -46,21 +52,21 @@ public class ConversationWindow {
         sendButton.addActionListener(e -> sendMessage());
 
         sendTextField.addFocusListener(new FocusAdapter() {
-            //TODO: Prevent default text from being sent,
-            //  while also allowing the user to type and send it
             @Override
             public void focusGained(FocusEvent e) {
                 super.focusGained(e);
-                if (sendTextField.getText().equals(MESSAGE_TEXT_FIELD_PLACEHOLDER)) {
+                if (defaultText && sendTextField.getText().equals(SEND_TEXT_FIELD_PLACEHOLDER)) {
                     sendTextField.setText("");
+                    defaultText = false;
                 }
             }
 
             @Override
             public void focusLost(FocusEvent e) {
                 super.focusLost(e);
-                if (sendTextField.getText().isEmpty()) {
-                    sendTextField.setText(MESSAGE_TEXT_FIELD_PLACEHOLDER);
+                if (!defaultText && sendTextField.getText().isEmpty()) {
+                    sendTextField.setText(SEND_TEXT_FIELD_PLACEHOLDER);
+                    defaultText = true;
                 }
             }
         });
@@ -80,8 +86,7 @@ public class ConversationWindow {
         frame.setVisible(true);
     }
 
-    public void receiveMessage(Message message)
-    {
+    public void receiveMessage(Message message) {
         appendMessage(remoteUser.getNickname(), message);
     }
 }

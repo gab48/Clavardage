@@ -3,7 +3,6 @@ package Views;
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowEvent;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -31,7 +30,7 @@ public class WelcomeWindow {
             information.put("localPort", localPortField.getText());
             information.put("remoteAddress", remoteAddressField.getText());
             information.put("remotePort", remotePortField.getText());
-            frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+            frame.dispose();
             informationReady = true;
             this.notifyAll();
         }
@@ -86,7 +85,7 @@ public class WelcomeWindow {
         SwingUtilities.invokeLater(() -> {
             welcomeWindow.frame.setContentPane(welcomeWindow.entireWindowPanel);
             //TODO: Exit upon user deliberately closing the window
-            welcomeWindow.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            welcomeWindow.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             welcomeWindow.frame.pack();
             welcomeWindow.frame.setLocationRelativeTo(null);
             welcomeWindow.frame.setVisible(true);
