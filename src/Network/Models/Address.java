@@ -45,9 +45,11 @@ public class Address {
             InetAddress localHost = InetAddress.getLocalHost();
             if(localHost != null) {
                 NetworkInterface myInterface = NetworkInterface.getByInetAddress(localHost);
-                InetAddress bc = myInterface.getInterfaceAddresses().get(0).getBroadcast();
-                if (bc != null) {
-                    return new Address(bc);
+                for(InterfaceAddress iAddr : myInterface.getInterfaceAddresses()) {
+                    InetAddress bc = iAddr.getBroadcast();
+                    if(bc != null) {
+                        return new Address(bc);
+                    }
                 }
             }
         } catch (UnknownHostException | SocketException e) {
