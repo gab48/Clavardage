@@ -1,7 +1,8 @@
 package Network.SocketProtocols;
 
-import Network.CCP.CCPPacket;
-import Network.Packet;
+import Network.Models.Address;
+import Network.Models.Packet;
+import Network.Types.ProtocolType;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -15,6 +16,7 @@ public class UDPsocket extends Socket{
 
     public UDPsocket(short localPort) {
         super(localPort);
+        this.protocol = ProtocolType.UDP;
         try {
             if (this.localPort > 1024) {
                 this.socket = new DatagramSocket(this.localPort);
@@ -28,10 +30,8 @@ public class UDPsocket extends Socket{
 
     public UDPsocket() {
         this((short) 0);
+        this.protocol = ProtocolType.UDP;
     }
-
-    @Override
-    public int accept() { return 0; }
 
     @Override
     public int send(Packet packet) {
@@ -44,7 +44,6 @@ public class UDPsocket extends Socket{
         try {
             this.socket.send(datagramPacket);
             byteSent = datagramPacket.getLength();
-            System.out.println(byteSent+" bytes sent !");
         } catch (IOException e) {
             e.printStackTrace();
             byteSent = -1;
@@ -60,12 +59,16 @@ public class UDPsocket extends Socket{
         try {
             this.socket.receive(datagramPacket);
             packet.unserialize(datagramPacket.getData());
+            packet.setSrc(new Address(datagramPacket.getAddress()));
             return packet; // return build(Class, bytes)
         } catch (IOException e){
             e.printStackTrace();
         }
         return null;
     }
+
+    @Override
+    public int accept() { return 0; }
 
     @Override
     public int close() {

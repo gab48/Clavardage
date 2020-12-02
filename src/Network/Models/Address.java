@@ -1,9 +1,7 @@
-package Network.Utils;
+package Network.Models;
 
-import Network.Packet;
-
+import java.io.IOException;
 import java.net.*;
-import java.util.Enumeration;
 
 public class Address {
 
@@ -30,32 +28,33 @@ public class Address {
 
     public static Address getMyIP() {
         try {
-            return new Address(InetAddress.getLocalHost());
-        } catch (UnknownHostException e) {
+            InetAddress ip = InetAddress.getLocalHost();
+            if (ip.isLoopbackAddress()) { //TODO: Find a better way
+                Socket s = new Socket("8.8.8.8", 53);
+                ip = s.getLocalAddress();
+                s.close();
+            }
+            return new Address(ip);
+        } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
     }
     public static Address getBroadcast() {
         try {
-            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-            while(interfaces.hasMoreElements()) {
-                NetworkInterface currentInterface = interfaces.nextElement();
-                if(!currentInterface.isLoopback()) {
-                    for(InterfaceAddress interfaceAddress : currentInterface.getInterfaceAddresses()) {
-                        Address addr = new Address(interfaceAddress.getAddress());
-                        if (addr == getMyIP()) {
-                            addr = new Address(interfaceAddress.getBroadcast());
-                            return addr;
-                        }
-                    }
+            InetAddress localHost = InetAddress.getLocalHost();
+            if(localHost != null) {
+                NetworkInterface myInterface = NetworkInterface.getByInetAddress(localHost);
+                InetAddress bc = myInterface.getInterfaceAddresses().get(0).getBroadcast();
+                if (bc != null) {
+                    return new Address(bc);
                 }
             }
-            return null;
-        } catch (SocketException e) {
+        } catch (UnknownHostException | SocketException e) {
             e.printStackTrace();
-            return null;
         }
+
+        return null;
     }
 
     public InetAddress getIp() {
@@ -71,6 +70,6 @@ public class Address {
 
     @Override
     public String toString() {
-        return this.ip.toString()+':'+this.port;
+        return this.ip.getHostAddress()+':'+this.port;
     }
 }

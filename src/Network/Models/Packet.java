@@ -1,11 +1,11 @@
-package Network;
+package Network.Models;
 
-import Network.Utils.Address;
+import Network.Models.Address;
 import Utils.Serializable;
 
 public class Packet implements Serializable {
 
-    public static final short DEFAULT_SRC_PORT = 1920;
+    public static final short DEFAULT_SRC_PORT = 1921;
 
     protected String payload;
     protected Address dest;
@@ -34,6 +34,10 @@ public class Packet implements Serializable {
 
     public Address getSrc() {
         return src;
+    }
+
+    public void setSrc(Address src) {
+        this.src = src;
     }
 
     @Override

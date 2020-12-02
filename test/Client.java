@@ -1,9 +1,6 @@
 import Models.User;
-import Network.CCP.CCPController;
-import Network.CCP.CCPListenerPool;
-import Network.CCP.CCPPacket;
-import Network.SocketProtocols.UDPsocket;
-import Network.Utils.CCPPacketType;
+import Network.Controllers.CCPController;
+import Network.Listeners.CCPListenerPool;
 
 public class Client {
     public static void main(String[] args) {

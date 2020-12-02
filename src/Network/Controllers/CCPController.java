@@ -1,9 +1,13 @@
-package Network.CCP;
+package Network.Controllers;
 
 import Models.User;
+import Network.Models.CCPPacket;
 import Network.SocketProtocols.UDPsocket;
-import Network.Utils.Address;
-import Network.Utils.CCPPacketType;
+import Network.Models.Address;
+import Network.Types.CCPPacketType;
+
+import java.sql.SQLOutput;
+import java.util.Objects;
 
 public class CCPController {
 
@@ -16,8 +20,9 @@ public class CCPController {
     public void sendDiscovery() {
         CCPPacket discover = new CCPPacket(CCPPacketType.DISCOVER, this.me);
         UDPsocket sock = new UDPsocket();
-        sock.connect("127.0.0.1", (short) 1921);
+        sock.connect(Address.getBroadcast());
         sock.send(discover);
+        System.out.println("Broadcast : "+ discover);
     }
 
     public void sendReplyTo(Address dest) {
@@ -25,7 +30,7 @@ public class CCPController {
         reply.setDestAddr(dest);
         System.out.println("Sending REPLY : "+ reply);
         UDPsocket sock = new UDPsocket();
-        sock.connect("127.0.0.1", (short) 1922);
+        sock.connect(dest);
         sock.send(reply);
     }
 }

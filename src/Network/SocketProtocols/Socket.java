@@ -1,14 +1,12 @@
 package Network.SocketProtocols;
 
-import Network.Packet;
-import Network.Utils.Address;
-import Network.Utils.TransportProtocols;
-
-import java.io.IOException;
+import Network.Models.Packet;
+import Network.Models.Address;
+import Network.Types.ProtocolType;
 
 public abstract class Socket {
 
-    protected TransportProtocols protocol;
+    protected ProtocolType protocol;
     protected Address remoteAddr;
     protected short localPort;
 

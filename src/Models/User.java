@@ -1,9 +1,6 @@
 package Models;
 
-import Network.Utils.Address;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import Network.Models.Address;
 
 public class User {
 

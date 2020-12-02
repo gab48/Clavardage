@@ -1,7 +1,9 @@
-package Network.CCP;
+package Network.Handlers;
 
 import Models.User;
-import Network.Utils.Address;
+import Network.Controllers.CCPController;
+import Network.Models.Address;
+import Network.Models.CCPPacket;
 
 public class CCPPacketHandler implements Runnable {
 
@@ -23,7 +25,7 @@ public class CCPPacketHandler implements Runnable {
 
         if (this.packet.getType() == 0) {
             //Get my infos
-            User me = new User("XxRené.Ga56xX", new Address("127.0.0.1", (short) 1920));
+            User me = new User("XxRené.Ga56xX", Address.getMyIP());
             CCPController ccpController = new CCPController(me);
             ccpController.sendReplyTo(this.packet.getSrc());
         }
@@ -31,6 +33,6 @@ public class CCPPacketHandler implements Runnable {
 
         //TODO: Save remoteUser
         User remoteUser = this.packet.getUserFromDiscover();
-        System.out.println("Update user list with this one : \n" + remoteUser);
+        System.out.println("Update user list with this one : " + remoteUser);
     }
 }

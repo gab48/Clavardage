@@ -1,15 +1,16 @@
-package Network.CCP;
+package Network.Listeners;
 
+import Network.Handlers.CCPPacketHandler;
+import Network.Models.CCPPacket;
 import Network.SocketProtocols.UDPsocket;
 
-import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class CCPListenerPool implements Runnable {
 
-    public static final short CCP_SRV_PORT   = 1921;
-    public static final int POOL_SIZE      = 5;
+    public static final short   CCP_SRV_PORT   = 1921;
+    public static final int     POOL_SIZE      = 5;
     private UDPsocket srvSock;
     private ExecutorService pool;
 

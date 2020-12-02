@@ -1,9 +1,8 @@
-package Network.CCP;
+package Network.Models;
 
 import Models.User;
-import Network.Packet;
-import Network.Utils.Address;
-import Network.Utils.CCPPacketType;
+import Network.Listeners.CCPListenerPool;
+import Network.Types.CCPPacketType;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
