@@ -1,8 +1,8 @@
-import Network.Listeners.CCPListenerPool;
+import Clavardage.Network.Listeners.MsgListenerPool;
 
 public class Server {
     public static void main(String[] args) {
-        CCPListenerPool srv = new CCPListenerPool((short) 1921);
+        MsgListenerPool srv = new MsgListenerPool();
         Thread srvThread = new Thread(srv);
         srvThread.start();
     }

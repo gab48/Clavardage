@@ -1,4 +1,4 @@
-import Network.Models.Address;
+import Clavardage.Network.Models.Address;
 
 public class Test {
     public static void main(String[] args) {
