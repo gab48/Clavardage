@@ -1,6 +1,7 @@
 package Clavardage;
 
 import Clavardage.Models.User;
+import Clavardage.Network.Listeners.MsgListenerPool;
 import Clavardage.Network.Models.Address;
 import Clavardage.Views.ConversationWindow;
 import Clavardage.Views.WelcomeWindow;
@@ -30,7 +31,10 @@ public class Main {
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
+        Env.setCw(new ConversationWindow(localUser, remoteUser));
 
-        new ConversationWindow(localUser, remoteUser);
+        MsgListenerPool srv = new MsgListenerPool();
+        Thread srvThread = new Thread(srv);
+        srvThread.start();
     }
 }

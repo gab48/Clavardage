@@ -1,11 +1,16 @@
 package Clavardage.Network.Handlers;
 
 import Clavardage.Network.Models.Packet;
+import Clavardage.Observers.Listener;
+import Clavardage.Observers.Observable;
 
-public abstract class PacketHandler<T extends Packet> implements Runnable {
+import java.util.ArrayList;
+
+public abstract class PacketHandler<T extends Packet> implements Runnable, Observable {
 
     protected int id;
     protected T packet;
+    protected ArrayList<Listener> listeners = new ArrayList<>();
 
     public PacketHandler (int id, T packet){
         this.id = id;
@@ -14,6 +19,23 @@ public abstract class PacketHandler<T extends Packet> implements Runnable {
 
     public int getId() {
         return this.id;
+    }
+
+    @Override
+    public void addListener(Listener l) {
+        listeners.add(l);
+    }
+
+    @Override
+    public void removeListener(Listener l) {
+        listeners.remove(l);
+    }
+
+    @Override
+    public void notifyAll(Object... args) {
+        for (Listener l: this.listeners) {
+            l.handle(args);
+        }
     }
 
 }
