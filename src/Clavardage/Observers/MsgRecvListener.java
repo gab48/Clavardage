@@ -1,19 +1,19 @@
 package Clavardage.Observers;
 
 import Clavardage.Models.Message;
-import Clavardage.Views.ConversationWindow;
+import Clavardage.Views.ConversationPanel;
 
 public class MsgRecvListener implements Listener{
 
-    private ConversationWindow cw;
+    private final ConversationPanel conversationPanel;
 
-    public MsgRecvListener(ConversationWindow cw) {
-        this.cw = cw;
+    public MsgRecvListener(ConversationPanel conversationPanel) {
+        this.conversationPanel = conversationPanel;
     }
 
     @Override
     public void handle(Object... args) {
         Message msg = (Message) args[0];
-        cw.receiveMessage(msg);
+        this.conversationPanel.receiveMessage(msg);
     }
 }

@@ -1,15 +1,15 @@
-package Views;
+package Clavardage.Views;
 
-import Models.User;
+import Clavardage.Models.User;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class MainWindow extends JFrame {
 
-    private final TabbedConversations conversations;
+    public final TabbedConversations conversations;
 
-    public MainWindow(User localUser) {
+    public MainWindow() {
         super("Clavardage");
 
         JLabel titleLabel = new JLabel();
@@ -20,7 +20,7 @@ public class MainWindow extends JFrame {
         subPanel.setBackground(Color.GREEN);
         subPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 
-        this.conversations = new TabbedConversations(localUser);
+        this.conversations = new TabbedConversations();
         subPanel.add(this.conversations);
 
         JPanel entirePanel = new JPanel();
@@ -42,4 +42,6 @@ public class MainWindow extends JFrame {
             pack();
         });
     }
+
+    public ConversationPanel getConversation() { return this.conversations.getConversation(); }
 }

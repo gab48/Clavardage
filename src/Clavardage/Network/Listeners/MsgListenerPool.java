@@ -1,6 +1,7 @@
 package Clavardage.Network.Listeners;
 
 import Clavardage.Env;
+import Clavardage.Main;
 import Clavardage.Network.Handlers.MsgPacketHandler;
 import Clavardage.Network.Models.MessagePacket;
 import Clavardage.Network.SocketProtocols.TCPRecvSocket;
@@ -30,7 +31,7 @@ public class MsgListenerPool extends ListenerPool {
             recvPacket = (MessagePacket) this.srvSock.recv(recvPacket);
 
             currentHandler = new MsgPacketHandler(handlerId, recvPacket);
-            currentHandler.addListener(new MsgRecvListener(Env.getCw()));
+            currentHandler.addListener(new MsgRecvListener(Main.getConversation()));
             this.pool.execute(currentHandler);
         }
     }

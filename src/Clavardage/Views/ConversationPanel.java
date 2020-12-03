@@ -1,7 +1,8 @@
-package Views;
+package Clavardage.Views;
 
-import Models.Message;
-import Models.User;
+import Clavardage.Models.LocalUser;
+import Clavardage.Models.Message;
+import Clavardage.Models.User;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +11,6 @@ import java.awt.event.*;
 public class ConversationPanel extends JPanel{
     private static final String SEND_TEXT_FIELD_PLACEHOLDER = "Type a message...";
 
-    private final User localUser;
     private final User remoteUser;
 
     private final JTextArea conversationTextArea;
@@ -19,8 +19,7 @@ public class ConversationPanel extends JPanel{
 
     private boolean defaultText;
 
-    public ConversationPanel(User localUser, User remoteUser) {
-        this.localUser = localUser;
+    public ConversationPanel(User remoteUser) {
         this.remoteUser = remoteUser;
 
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -82,7 +81,7 @@ public class ConversationPanel extends JPanel{
         //TODO: Never trust user input (more precisely than empty messages?)
         if (content.length() > 0 && !this.defaultText) {
             Message message = new Message(content);
-            appendMessage(this.localUser, message);
+            appendMessage(LocalUser.getInstance(), message);
             if (this.sendTextField.hasFocus()) {
                 this.sendTextField.setText("");
             } else {
