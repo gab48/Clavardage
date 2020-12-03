@@ -78,13 +78,13 @@ public class WelcomeWindow {
         }
         return information;
     }
+
     public static Map<String, String> askInformation() throws InterruptedException {
         WelcomeWindow welcomeWindow = new WelcomeWindow();
 
 
         SwingUtilities.invokeLater(() -> {
             welcomeWindow.frame.setContentPane(welcomeWindow.entireWindowPanel);
-            //TODO: Exit upon user deliberately closing the window
             welcomeWindow.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             welcomeWindow.frame.pack();
             welcomeWindow.frame.setLocationRelativeTo(null);
@@ -93,4 +93,5 @@ public class WelcomeWindow {
 
         return welcomeWindow.getInformation();
     }
+
 }
