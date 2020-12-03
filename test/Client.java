@@ -1,18 +1,12 @@
-import Models.User;
-import Network.CCP.CCPController;
-import Network.CCP.CCPListenerPool;
-import Network.CCP.CCPPacket;
-import Network.SocketProtocols.UDPsocket;
-import Network.Utils.CCPPacketType;
+import Clavardage.Models.LocalUser;
+import Clavardage.Models.User;
+import Clavardage.Network.Controllers.CCPController;
+import Clavardage.Network.Listeners.CCPListenerPool;
 
 public class Client {
     public static void main(String[] args) {
-        CCPListenerPool srv = new CCPListenerPool((short) 1922);
-        Thread srvThread = new Thread(srv);
-        srvThread.start();
-
-        User michel = new User("micheldu31");
-        CCPController ccpController = new CCPController(michel);
+        LocalUser.instanciate("micheldu31");
+        CCPController ccpController = new CCPController();
         ccpController.sendDiscovery();
     }
 }
