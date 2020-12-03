@@ -3,6 +3,7 @@ package Clavardage.Views;
 import Clavardage.Models.LocalUser;
 import Clavardage.Models.Message;
 import Clavardage.Models.User;
+import Clavardage.Network.Controllers.ConversationController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,6 +13,7 @@ public class ConversationPanel extends JPanel{
     private static final String SEND_TEXT_FIELD_PLACEHOLDER = "Type a message...";
 
     private final User remoteUser;
+    private final ConversationController conversationController;
 
     private final JTextArea conversationTextArea;
 
@@ -21,6 +23,7 @@ public class ConversationPanel extends JPanel{
 
     public ConversationPanel(User remoteUser) {
         this.remoteUser = remoteUser;
+        this.conversationController = new ConversationController(this.remoteUser);
 
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
@@ -89,7 +92,8 @@ public class ConversationPanel extends JPanel{
                 this.defaultText = true;
             }
 
-            //TODO: Really send the message (notify a listener?)
+            Runnable code = () -> this.conversationController.sendMessage(message);
+            new Thread(code).start();
         }
     }
 
