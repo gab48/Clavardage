@@ -1,5 +1,7 @@
 package Clavardage;
 
+import Clavardage.Managers.MessagesManager;
+import Clavardage.Managers.UsersManager;
 import Clavardage.Models.User;
 import Clavardage.Network.Listeners.MsgListenerPool;
 import Clavardage.Network.Models.Address;
@@ -22,7 +24,8 @@ public class Main {
         // Keys are: "nickname", "localPort", "remoteAddress" and "remotePort"
         Map<String, String> information = WelcomeWindow.askInformation();
 
-        User localUser = new User(information.get("nickname"));
+        User.current = new User(information.get("nickname"));
+        System.out.println(User.current);
 
         User remoteUser = null;
         try {
@@ -31,10 +34,8 @@ public class Main {
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-        Env.setCw(new ConversationWindow(localUser, remoteUser));
-
-        MsgListenerPool srv = new MsgListenerPool();
-        Thread srvThread = new Thread(srv);
-        srvThread.start();
+        Env.setCw(new ConversationWindow(remoteUser));
+        MessagesManager mm = MessagesManager.getInstance();
+        UsersManager um = UsersManager.getInstance();
     }
 }

@@ -2,6 +2,7 @@ package Clavardage.Network.Models;
 
 import java.io.IOException;
 import java.net.*;
+import java.util.Objects;
 
 public class Address {
 
@@ -42,7 +43,7 @@ public class Address {
     }
     public static Address getBroadcast() {
         try {
-            InetAddress localHost = InetAddress.getLocalHost();
+            InetAddress localHost = Objects.requireNonNull(getMyIP()).getIp();
             if(localHost != null) {
                 NetworkInterface myInterface = NetworkInterface.getByInetAddress(localHost);
                 for(InterfaceAddress iAddr : myInterface.getInterfaceAddresses()) {
@@ -52,7 +53,7 @@ public class Address {
                     }
                 }
             }
-        } catch (UnknownHostException | SocketException e) {
+        } catch (SocketException e) {
             e.printStackTrace();
         }
 
@@ -73,5 +74,18 @@ public class Address {
     @Override
     public String toString() {
         return this.ip.getHostAddress()+':'+this.port;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        Address address = (Address) o;
+        return this.port == address.port && Objects.equals(this.ip, address.ip);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(ip, port);
     }
 }

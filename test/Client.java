@@ -4,8 +4,8 @@ import Clavardage.Network.Listeners.CCPListenerPool;
 
 public class Client {
     public static void main(String[] args) {
-        User michel = new User("micheldu31");
-        CCPController ccpController = new CCPController(michel);
+        User.current = new User("micheldu31");
+        CCPController ccpController = new CCPController();
         ccpController.sendDiscovery();
     }
 }

@@ -1,8 +1,8 @@
 package Clavardage.Network.Handlers;
 
+import Clavardage.Managers.UsersManager;
 import Clavardage.Models.User;
 import Clavardage.Network.Controllers.CCPController;
-import Clavardage.Network.Models.Address;
 import Clavardage.Network.Models.CCPPacket;
 
 public class CCPPacketHandler extends PacketHandler<CCPPacket> {
@@ -14,18 +14,24 @@ public class CCPPacketHandler extends PacketHandler<CCPPacket> {
     @Override
     public void run() {
         System.out.println("Processing this packet : " + this.packet);
-
-
-        if (this.packet.getType() == 0) {
-            //Get my infos
-            User me = new User("XxRené.Ga56xX", Address.getMyIP());
-            CCPController ccpController = new CCPController(me);
-            ccpController.sendReplyTo(this.packet.getSrc());
+        User remoteUser = this.packet.getUserFromCCP();
+        if(remoteUser != null) {
+            switch (this.packet.getType()) {
+                case 0: // DISCOVER package from a remoteUser
+                    if (!remoteUser.equals(User.current)) {
+                        CCPController ccpController = new CCPController();
+                        ccpController.sendReplyTo(remoteUser);
+                        UsersManager.addConnectedUser(remoteUser);
+                    }
+                    break;
+                case 1: // REPLY package
+                    UsersManager.addConnectedUser(remoteUser);
+                    break;
+                case 2: // DELETE package
+                    UsersManager.removeConnectedUser(remoteUser);
+                    break;
+            }
+        UsersManager.showList();
         }
-
-
-        //TODO: Save remoteUser
-        User remoteUser = this.packet.getUserFromDiscover();
-        System.out.println("Update user list with this one : " + remoteUser);
     }
 }

@@ -2,7 +2,11 @@ package Clavardage.Models;
 
 import Clavardage.Network.Models.Address;
 
+import java.util.Objects;
+
 public class User {
+
+    public static User current = null;
 
     private int id;
     private Address addr;
@@ -38,5 +42,18 @@ public class User {
                 ", addr=" + addr +
                 ", nickname='" + nickname + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return this.id == user.id && Objects.equals(addr, user.addr) && Objects.equals(nickname, user.nickname);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, addr, nickname);
     }
 }

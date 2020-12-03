@@ -6,11 +6,9 @@ import Clavardage.Network.Models.MessagePacket;
 import Clavardage.Network.SocketProtocols.TCPSendSocket;
 
 public class ConversationController {
-    private final User localUser;
     private final User remoteUser;
 
-    public ConversationController(User l, User r) {
-        this.localUser = l;
+    public ConversationController(User r) {
         this.remoteUser = r;
     }
 
@@ -19,8 +17,9 @@ public class ConversationController {
 
         TCPSendSocket socket = new TCPSendSocket();
         socket.connect(remoteUser.getAddr());
-        socket.send(msgPckt);
-        return 0;
+        int res = socket.send(msgPckt);
+        socket.close();
+        return res;
     }
 
 }

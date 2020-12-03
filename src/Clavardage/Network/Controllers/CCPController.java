@@ -8,26 +8,24 @@ import Clavardage.Network.Types.CCPPacketType;
 
 public class CCPController {
 
-    private User me;
+    public CCPController() {}
 
-    public CCPController(User myself) {
-        this.me = myself;
-    }
-
-    public void sendDiscovery() {
-        CCPPacket discover = new CCPPacket(CCPPacketType.DISCOVER, this.me);
+    public void sendDiscovery() { //TODO: Improve Discovery sending using Multicast (Less trafic and better efficiency)
+        CCPPacket discover = new CCPPacket(CCPPacketType.DISCOVER, User.current);
         UDPsocket sock = new UDPsocket();
         sock.connect(Address.getBroadcast());
         sock.send(discover);
+        sock.close();
         System.out.println("Broadcast : "+ discover);
     }
 
-    public void sendReplyTo(Address dest) {
-        CCPPacket reply = new CCPPacket(CCPPacketType.REPLY, this.me);
-        reply.setDestAddr(dest);
-        System.out.println("Sending REPLY : "+ reply);
+    public void sendReplyTo(User remoteUser) {
+        CCPPacket reply = new CCPPacket(CCPPacketType.REPLY, User.current);
+        reply.setDestAddr(remoteUser.getAddr());
+        System.out.println("Sending REPLY : " + reply);
         UDPsocket sock = new UDPsocket();
-        sock.connect(dest);
+        sock.connect(remoteUser.getAddr());
         sock.send(reply);
+        sock.close();
     }
 }

@@ -61,7 +61,7 @@ public class CCPPacket extends Packet {
         }
     }
 
-    public User getUserFromDiscover() {
+    public User getUserFromCCP() {
         User remote = null;
         String[] infos = this.payload.split("=");
         if(infos.length != 2) {

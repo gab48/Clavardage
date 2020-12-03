@@ -15,7 +15,6 @@ public class ConversationWindow {
     private JButton sendButton;
     private JTextField sendTextField;
 
-    private final User localUser;
     private final User remoteUser;
     private final ConversationController convController;
 
@@ -31,7 +30,7 @@ public class ConversationWindow {
         //TODO: Never trust user input (more precisely than empty messages?)
         if (content.length() > 0 && !defaultText) {
             Message message = new Message(content);
-            appendMessage(localUser.getNickname(), message);
+            appendMessage(User.current.getNickname(), message);
             sendTextField.setText("");
 
             Runnable run = () -> ConversationWindow.this.convController.sendMessage(message);
@@ -39,10 +38,9 @@ public class ConversationWindow {
         }
     }
 
-    public ConversationWindow(User localUser, User remoteUser) {
-        this.localUser = localUser;
+    public ConversationWindow(User remoteUser) {
         this.remoteUser = remoteUser;
-        this.convController = new ConversationController(localUser, remoteUser);
+        this.convController = new ConversationController(remoteUser);
 
         JFrame frame = new JFrame(remoteUser.getNickname());
 

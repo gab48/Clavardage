@@ -20,6 +20,7 @@ public class MsgListenerPool extends ListenerPool {
     public void run() {
         int handlerId = 0;
         MsgPacketHandler currentHandler;
+        System.out.println("MsgListenerPool running...");
 
         //TODO: Closing application => exit loop
         while (true) {

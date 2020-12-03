@@ -21,6 +21,7 @@ public class CCPListenerPool extends ListenerPool {
     public void run() {
         int handlerId = 0;
         CCPPacketHandler currentHandler;
+        System.out.println("CCPListenerPool running...");
 
         //TODO: Closing application => exit loop
         while (true) {
