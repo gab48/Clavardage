@@ -2,6 +2,7 @@ package Clavardage;
 
 import Clavardage.Managers.MessagesManager;
 import Clavardage.Managers.UsersManager;
+import Clavardage.Models.LocalUser;
 import Clavardage.Models.User;
 import Clavardage.Network.Listeners.MsgListenerPool;
 import Clavardage.Network.Models.Address;
@@ -24,8 +25,7 @@ public class Main {
         // Keys are: "nickname", "localPort", "remoteAddress" and "remotePort"
         Map<String, String> information = WelcomeWindow.askInformation();
 
-        User.current = new User(information.get("nickname"));
-        System.out.println(User.current);
+        LocalUser.instanciate(information.get("nickname"));
 
         User remoteUser = null;
         try {

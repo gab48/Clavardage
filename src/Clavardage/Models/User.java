@@ -6,22 +6,13 @@ import java.util.Objects;
 
 public class User {
 
-    public static User current = null;
-
-    private int id;
-    private Address addr;
-    private String nickname;
+    protected int id;
+    protected Address addr;
+    protected String nickname;
 
     public User(String nickname, Address addr) {
-        this(nickname);
-        if (addr != null) {
-            this.addr = addr;
-        }
-    }
-
-    public User(String nickname) {
         this.nickname = nickname;
-        this.addr = Address.getMyIP();
+        this.addr = addr;
     }
 
     public Address getAddr() {

@@ -1,6 +1,7 @@
 package Clavardage.Network.Handlers;
 
 import Clavardage.Managers.UsersManager;
+import Clavardage.Models.LocalUser;
 import Clavardage.Models.User;
 import Clavardage.Network.Controllers.CCPController;
 import Clavardage.Network.Models.CCPPacket;
@@ -18,7 +19,7 @@ public class CCPPacketHandler extends PacketHandler<CCPPacket> {
         if(remoteUser != null) {
             switch (this.packet.getType()) {
                 case 0: // DISCOVER package from a remoteUser
-                    if (!remoteUser.equals(User.current)) {
+                    if (!remoteUser.equals(LocalUser.getInstance())) {
                         CCPController ccpController = new CCPController();
                         ccpController.sendReplyTo(remoteUser);
                         UsersManager.addConnectedUser(remoteUser);

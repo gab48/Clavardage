@@ -1,5 +1,6 @@
 package Clavardage.Views;
 
+import Clavardage.Models.LocalUser;
 import Clavardage.Models.Message;
 import Clavardage.Models.User;
 import Clavardage.Network.Controllers.ConversationController;
@@ -30,7 +31,7 @@ public class ConversationWindow {
         //TODO: Never trust user input (more precisely than empty messages?)
         if (content.length() > 0 && !defaultText) {
             Message message = new Message(content);
-            appendMessage(User.current.getNickname(), message);
+            appendMessage(LocalUser.getInstance().getNickname(), message);
             sendTextField.setText("");
 
             Runnable run = () -> ConversationWindow.this.convController.sendMessage(message);
