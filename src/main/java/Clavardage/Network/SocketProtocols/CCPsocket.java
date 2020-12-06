@@ -1,36 +1,42 @@
 package Clavardage.Network.SocketProtocols;
 
+import Clavardage.Env;
 import Clavardage.Network.Models.Address;
 import Clavardage.Network.Models.Packet;
 import Clavardage.Network.Types.ProtocolType;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
-import java.net.DatagramSocket;
+import java.net.InetSocketAddress;
+import java.net.MulticastSocket;
 import java.net.SocketException;
+import java.util.Objects;
 
-public class UDPsocket extends Socket{
+public class CCPsocket extends Socket{
 
-    private static final int PAYLOAD_MAX_SIZE = 8192;
-    private DatagramSocket socket;
+    protected static final int PAYLOAD_MAX_SIZE = 8192;
+    protected MulticastSocket socket;
 
-    public UDPsocket(short localPort) {
+    public CCPsocket(short localPort) {
         super(localPort);
         this.protocol = ProtocolType.UDP;
+
         try {
             if (this.localPort > 1024) {
-                this.socket = new DatagramSocket(this.localPort);
+                this.socket = new MulticastSocket(this.localPort);
+                this.socket.joinGroup(new InetSocketAddress(Objects.requireNonNull(Address.getMulticast()).getIp(), Env.NETWORK_UDP_SRV_PORT), Address.getInterface());
+            } else if (this.localPort == 0) {
+                this.socket = new MulticastSocket();
             } else {
-                this.socket = new DatagramSocket();
+                System.err.println("Please use a port >1024");
             }
-        } catch (SocketException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public UDPsocket() {
+    public CCPsocket() {
         this((short) 0);
-        this.protocol = ProtocolType.UDP;
     }
 
     @Override
@@ -38,7 +44,7 @@ public class UDPsocket extends Socket{
         int byteSent;
         byte[] payload = packet.serialize();
 
-        DatagramPacket datagramPacket = new DatagramPacket(payload, payload.length, this.remoteAddr.getIp(), this.remoteAddr.getPort());
+        DatagramPacket datagramPacket = new DatagramPacket(payload, payload.length, packet.getDest().getIp(), packet.getDest().getPort());
         datagramPacket.setData(payload);
 
         try {

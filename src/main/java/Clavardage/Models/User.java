@@ -38,7 +38,7 @@ public class User {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || this.getClass() != o.getClass()) return false;
+        if (o == null) return false;
         User user = (User) o;
         return this.id == user.id && Objects.equals(addr, user.addr) && Objects.equals(nickname, user.nickname);
     }

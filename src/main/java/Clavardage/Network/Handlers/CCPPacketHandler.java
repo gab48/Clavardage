@@ -31,6 +31,8 @@ public class CCPPacketHandler extends PacketHandler<CCPPacket> {
                 case 2: // DELETE package
                     UsersManager.removeConnectedUser(remoteUser);
                     break;
+                default:
+                    break;
             }
         UsersManager.showList();
         }

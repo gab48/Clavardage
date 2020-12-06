@@ -1,5 +1,7 @@
 package Clavardage.Network.Models;
 
+import Clavardage.Env;
+
 import java.io.IOException;
 import java.net.*;
 import java.util.Objects;
@@ -41,23 +43,41 @@ public class Address {
             return null;
         }
     }
-    public static Address getBroadcast() {
-        try {
-            InetAddress localHost = Objects.requireNonNull(getMyIP()).getIp();
-            if(localHost != null) {
-                NetworkInterface myInterface = NetworkInterface.getByInetAddress(localHost);
-                for(InterfaceAddress iAddr : myInterface.getInterfaceAddresses()) {
-                    InetAddress bc = iAddr.getBroadcast();
-                    if(bc != null) {
-                        return new Address(bc);
+
+    public static Address getMulticast() {
+        if (Env.MULTICAST) {
+            try {
+                return new Address(InetAddress.getByName(Env.MULTICAST_GROUP));
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                InetAddress localHost = Objects.requireNonNull(getMyIP()).getIp();
+                if (localHost != null) {
+                    NetworkInterface myInterface = NetworkInterface.getByInetAddress(localHost);
+                    for (InterfaceAddress iAddr : myInterface.getInterfaceAddresses()) {
+                        InetAddress bc = iAddr.getBroadcast();
+                        if (bc != null) {
+                            return new Address(bc);
+                        }
                     }
                 }
+            } catch (SocketException e) {
+                e.printStackTrace();
             }
+        }
+        return null;
+    }
+
+    public static NetworkInterface getInterface() {
+        NetworkInterface networkInterface = null;
+        try {
+            networkInterface = NetworkInterface.getByInetAddress(Objects.requireNonNull(getMyIP()).getIp());
         } catch (SocketException e) {
             e.printStackTrace();
         }
-
-        return null;
+        return networkInterface;
     }
 
     public InetAddress getIp() {

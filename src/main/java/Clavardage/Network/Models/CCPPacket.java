@@ -16,7 +16,7 @@ public class CCPPacket extends Packet {
         super();
         if (type == CCPPacketType.DISCOVER) {
             this.type = 0;
-            this.dest = Address.getBroadcast();
+            this.dest = Address.getMulticast();
             if (this.dest != null) {
                 this.dest.setPort(Env.NETWORK_UDP_SRV_PORT);
             }

@@ -8,7 +8,6 @@ import Clavardage.Network.Types.ProtocolType;
 public abstract class Socket {
 
     protected ProtocolType protocol;
-    protected Address remoteAddr;
     protected short localPort;
 
     public static int listen() { // Server
@@ -23,19 +22,6 @@ public abstract class Socket {
 
     public Socket(){
         this((short) 0);
-    }
-
-    public int connect(Address addr) {
-        this.remoteAddr = addr;
-        return 0;
-    }
-
-    public int connect(String ip, short port) {
-        return connect(new Address(ip, port));
-    }
-
-    public int connect(User remoteUser) {
-        return connect(remoteUser.getAddr());
     }
 
     public int accept() {
