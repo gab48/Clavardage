@@ -1,15 +1,14 @@
 package Clavardage.Network.SocketProtocols;
 
-import Clavardage.Env;
 import Clavardage.Network.Models.Address;
 import Clavardage.Network.Models.Packet;
 import Clavardage.Network.Types.ProtocolType;
+import Clavardage.Utils.Config;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
-import java.net.SocketException;
 import java.util.Objects;
 
 public class CCPsocket extends Socket{
@@ -24,7 +23,7 @@ public class CCPsocket extends Socket{
         try {
             if (this.localPort > 1024) {
                 this.socket = new MulticastSocket(this.localPort);
-                this.socket.joinGroup(new InetSocketAddress(Objects.requireNonNull(Address.getMulticast()).getIp(), Env.NETWORK_UDP_SRV_PORT), Address.getInterface());
+                this.socket.joinGroup(new InetSocketAddress(Objects.requireNonNull(Address.getMulticast()).getIp(), Short.parseShort(Config.get("NETWORK_UDP_SRV_PORT"))), Address.getInterface());
             } else if (this.localPort == 0) {
                 this.socket = new MulticastSocket();
             } else {

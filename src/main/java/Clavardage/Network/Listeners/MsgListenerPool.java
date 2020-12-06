@@ -1,19 +1,19 @@
 package Clavardage.Network.Listeners;
 
-import Clavardage.Env;
 import Clavardage.Main;
 import Clavardage.Network.Handlers.MsgPacketHandler;
 import Clavardage.Network.Models.MessagePacket;
 import Clavardage.Network.SocketProtocols.TCPRecvSocket;
 import Clavardage.Observers.MsgRecvListener;
+import Clavardage.Utils.Config;
 
 public class MsgListenerPool extends ListenerPool {
 
     private TCPRecvSocket srvSock;
 
     public MsgListenerPool() {
-        super(Env.MSG_LISTENER_POOL_SIZE);
-        this.srvSock = new TCPRecvSocket(Env.NETWORK_TCP_SRV_PORT);
+        super(Integer.parseInt(Config.get("MSG_LISTENER_POOL_SIZE")));
+        this.srvSock = new TCPRecvSocket(Short.parseShort(Config.get("NETWORK_TCP_SRV_PORT")));
     }
 
     @Override

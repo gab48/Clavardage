@@ -1,9 +1,8 @@
 package Clavardage.Network.Models;
 
-import Clavardage.Env;
 import Clavardage.Models.User;
-import Clavardage.Network.Listeners.CCPListenerPool;
 import Clavardage.Network.Types.CCPPacketType;
+import Clavardage.Utils.Config;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -18,7 +17,7 @@ public class CCPPacket extends Packet {
             this.type = 0;
             this.dest = Address.getMulticast();
             if (this.dest != null) {
-                this.dest.setPort(Env.NETWORK_UDP_SRV_PORT);
+                this.dest.setPort(Short.parseShort(Config.get("NETWORK_UDP_SRV_PORT")));
             }
             this.payload = user.getNickname()+'='+this.src.getIp().getHostAddress();
         }
@@ -34,7 +33,7 @@ public class CCPPacket extends Packet {
     public int getType() { return type; }
     public void setDestAddr (Address addr) {
         this.dest = addr;
-        this.dest.setPort(Env.NETWORK_UDP_SRV_PORT);
+        this.dest.setPort(Short.parseShort(Config.get("NETWORK_UDP_SRV_PORT")));
     }
 
     @Override

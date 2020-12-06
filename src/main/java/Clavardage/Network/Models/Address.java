@@ -1,6 +1,6 @@
 package Clavardage.Network.Models;
 
-import Clavardage.Env;
+import Clavardage.Utils.Config;
 
 import java.io.IOException;
 import java.net.*;
@@ -45,9 +45,9 @@ public class Address {
     }
 
     public static Address getMulticast() {
-        if (Env.MULTICAST) {
+        if (Boolean.getBoolean(Config.get("MULTICAST"))) {
             try {
-                return new Address(InetAddress.getByName(Env.MULTICAST_GROUP));
+                return new Address(InetAddress.getByName(Config.get("MULTICAST_GROUP")));
             } catch (UnknownHostException e) {
                 e.printStackTrace();
             }

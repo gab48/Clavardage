@@ -8,6 +8,8 @@ import Clavardage.Network.Models.CCPPacket;
 
 public class CCPPacketHandler extends PacketHandler<CCPPacket> {
 
+    private UsersManager um = UsersManager.getInstance();
+
     public CCPPacketHandler(int id, CCPPacket packet) {
         super(id, packet);
     }
@@ -22,19 +24,19 @@ public class CCPPacketHandler extends PacketHandler<CCPPacket> {
                     if (!remoteUser.equals(LocalUser.getInstance())) {
                         CCPController ccpController = new CCPController();
                         ccpController.sendReplyTo(remoteUser);
-                        UsersManager.addConnectedUser(remoteUser);
+                        this.um.addConnectedUser(remoteUser);
                     }
                     break;
                 case 1: // REPLY package
-                    UsersManager.addConnectedUser(remoteUser);
+                    this.um.addConnectedUser(remoteUser);
                     break;
                 case 2: // DELETE package
-                    UsersManager.removeConnectedUser(remoteUser);
+                    this.um.removeConnectedUser(remoteUser);
                     break;
                 default:
                     break;
             }
-        UsersManager.showList();
+        this.um.showList();
         }
     }
 }

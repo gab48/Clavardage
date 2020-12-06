@@ -39,8 +39,12 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null) return false;
-        User user = (User) o;
-        return this.id == user.id && Objects.equals(addr, user.addr) && Objects.equals(nickname, user.nickname);
+        if (this.getClass() != o.getClass()) {
+            User user = (User) o;
+            return Objects.equals(this.id, user.id) && Objects.equals(this.addr, user.addr) && Objects.equals(this.nickname, user.nickname);
+        } else {
+            return false;
+        }
     }
 
     @Override

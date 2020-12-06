@@ -1,17 +1,17 @@
 package Clavardage.Network.Listeners;
 
-import Clavardage.Env;
 import Clavardage.Network.Handlers.CCPPacketHandler;
 import Clavardage.Network.Models.CCPPacket;
 import Clavardage.Network.SocketProtocols.CCPsocket;
+import Clavardage.Utils.Config;
 
 public class CCPListenerPool extends ListenerPool {
 
     private CCPsocket srvSock;
 
     public CCPListenerPool() {
-        super(Env.CCP_LISTENER_POOL_SIZE);
-        this.srvSock = new CCPsocket(Env.NETWORK_UDP_SRV_PORT);
+        super(Integer.parseInt(Config.get("CCP_LISTENER_POOL_SIZE")));
+        this.srvSock = new CCPsocket(Short.parseShort(Config.get("NETWORK_UDP_SRV_PORT")));
     }
 
     @SuppressWarnings("InfiniteLoopStatement")
