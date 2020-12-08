@@ -1,5 +1,3 @@
-package Clavardage;
-
 import Clavardage.Network.Listeners.MsgListenerPool;
 
 public class Server {
