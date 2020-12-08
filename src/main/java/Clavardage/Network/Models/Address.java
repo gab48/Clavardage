@@ -45,7 +45,7 @@ public class Address {
     }
 
     public static Address getMulticast() {
-        if (Boolean.getBoolean(Config.get("MULTICAST"))) {
+        if (Boolean.parseBoolean(Config.get("MULTICAST"))) {
             try {
                 return new Address(InetAddress.getByName(Config.get("MULTICAST_GROUP")));
             } catch (UnknownHostException e) {
