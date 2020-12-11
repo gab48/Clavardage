@@ -18,6 +18,7 @@ public class User {
     public Address getAddr() {
         return addr;
     }
+
     public String getNickname() {
         return nickname;
     }

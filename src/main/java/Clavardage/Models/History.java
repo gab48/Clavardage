@@ -15,6 +15,7 @@ public class History {
 
     public void append(Message msg) {
         this.messagesHistory.add(msg);
+
     }
 
     public ArrayList<Message> getMessagesHistory() {

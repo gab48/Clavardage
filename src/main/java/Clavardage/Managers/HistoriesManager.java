@@ -1,5 +1,5 @@
 package Clavardage.Managers;
 
-public class HistoriesManager extends Manager{
+public class HistoriesManager implements Manager{
 
 }

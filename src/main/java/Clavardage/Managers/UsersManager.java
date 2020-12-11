@@ -6,7 +6,7 @@ import Clavardage.Network.Listeners.CCPListenerPool;
 
 import java.util.ArrayList;
 
-public class UsersManager extends Manager {
+public class UsersManager implements Manager {
     private static final UsersManager INSTANCE = new UsersManager();
 
     private final ArrayList<User> connectedUsers = new ArrayList<>();

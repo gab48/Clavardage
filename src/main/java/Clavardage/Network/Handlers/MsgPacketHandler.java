@@ -21,6 +21,5 @@ public class MsgPacketHandler extends PacketHandler<MessagePacket>{
 
         System.out.println("Message received : "+msg.getContent()+" at "+msg.getTime());
         this.notifyAll(msg);
-
     }
 }

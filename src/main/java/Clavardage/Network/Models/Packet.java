@@ -2,7 +2,7 @@ package Clavardage.Network.Models;
 
 import Clavardage.Utils.Serializable;
 
-public class Packet implements Serializable {
+public class Packet implements PacketBasics {
 
     public static final short DEFAULT_SRC_PORT = 1921;
 
