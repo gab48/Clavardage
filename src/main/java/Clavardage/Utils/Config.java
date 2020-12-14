@@ -6,7 +6,7 @@ import java.util.Properties;
 
 public class Config {
 
-    private static final String CONFIG_FILE_NAME = "src/main/.config";
+    private static final String CONFIG_FILE_NAME = ".config";
     private static final Config INSTANCE = new Config(CONFIG_FILE_NAME);
     private final Properties conf;
 

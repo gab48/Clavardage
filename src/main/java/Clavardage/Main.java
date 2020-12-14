@@ -28,8 +28,6 @@ public class Main {
         MessagesManager mm = MessagesManager.getInstance();
         UsersManager um = UsersManager.getInstance();
 
-        um.addListener(MainWindow.getInstance());
-
         um.addConnectedUser(new User("BobDuPacket", Address.getMyIP()));
     }
 }

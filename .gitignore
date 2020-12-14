@@ -2,4 +2,4 @@
 /out
 /target
 /src/test/java/
-/src/main/.config
+.config

@@ -38,12 +38,16 @@ public class MainWindow extends JFrame implements Listener {
 
     private final UsersManager usersManager = UsersManager.getInstance();
 
-    private final JList connectedUsersList = new JList(usersManager.getConnectedUsers().toArray());
+    private final JList connectedUsersList = new JList();
 
     private MainWindow() {
         super("Clavardage");
 
-        this.connectedUsersList.setModel(new DefaultListModel());
+        DefaultListModel model = new DefaultListModel();
+        this.connectedUsersList.setModel(model);
+        model.addAll(usersManager.getConnectedUsers());
+        this.usersManager.addListener(this);
+
         this.connectedUsersList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.connectedUsersList.setLayoutOrientation(JList.VERTICAL);
         this.connectedUsersList.setVisibleRowCount(10);
@@ -98,12 +102,16 @@ public class MainWindow extends JFrame implements Listener {
 
     private void addConnectedUser(User u) {
         DefaultListModel model = (DefaultListModel) this.connectedUsersList.getModel();
-        model.addElement(u);
+        SwingUtilities.invokeLater(() -> {
+            model.addElement(u);
+        });
     }
 
     private void removeConnectedUser(User u) {
         DefaultListModel model = (DefaultListModel) this.connectedUsersList.getModel();
-        model.removeElement(u);
+        SwingUtilities.invokeLater(() -> {
+            model.removeElement(u);
+        });
     }
 
     @Override

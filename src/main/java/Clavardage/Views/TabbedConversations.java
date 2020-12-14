@@ -17,7 +17,7 @@ public class TabbedConversations extends JTabbedPane implements Listener {
         this.setPreferredSize(new Dimension(805, 501));
     }
 
-    public void addConversation(User remoteUser) {
+    public ConversationPanel addConversation(User remoteUser) {
         if (this.conversationsByNickname.containsKey(remoteUser.getNickname())) {
             throw new IllegalArgumentException("Conversation already opened");
         }
@@ -25,6 +25,7 @@ public class TabbedConversations extends JTabbedPane implements Listener {
         ConversationPanel conversationPanel = new ConversationPanel(remoteUser);
         this.conversationsByNickname.put(remoteUser.getNickname(), conversationPanel);
         this.addTab(remoteUser.getNickname(), conversationPanel);
+        return conversationPanel;
     }
 
     public void focusConversation(User remoteUser) {
@@ -33,7 +34,12 @@ public class TabbedConversations extends JTabbedPane implements Listener {
     }
 
     public ConversationPanel getConversation(User remoteUser) {
-        return this.conversationsByNickname.get(remoteUser.getNickname());
+        ConversationPanel conversation = this.conversationsByNickname.get(remoteUser.getNickname());
+        if (conversation != null) {
+            return conversation;
+        } else {
+            return this.addConversation(remoteUser);
+        }
     }
 
     @Override
