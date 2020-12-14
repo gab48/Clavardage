@@ -5,23 +5,12 @@ import Clavardage.Managers.UsersManager;
 import Clavardage.Models.LocalUser;
 import Clavardage.Models.User;
 import Clavardage.Network.Models.Address;
-import Clavardage.Views.ConversationPanel;
 import Clavardage.Views.MainWindow;
-import Clavardage.Views.WelcomeWindow;
+import Clavardage.Views.NicknameSelectionWindow;
 
 import javax.swing.*;
-import java.lang.reflect.InvocationTargetException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Map;
 
 public class Main {
-
-    //TODO: Don't make this a global variable
-    public static MainWindow mainWindow;
-
-    //TODO: Allow multiple conversations
-    public static ConversationPanel getConversation() { return Main.mainWindow.getConversation(); }
 
     public static void main(String[] args) throws InterruptedException {
         try {
@@ -29,27 +18,18 @@ public class Main {
         } catch (IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        // Keys are: "nickname", "localPort", "remoteAddress" and "remotePort"
-        Map<String, String> information = WelcomeWindow.askInformation();
 
-        LocalUser.instanciate(information.get("nickname"));
+        String nickname = NicknameSelectionWindow.askNickname();
 
-        User remoteUser = null;
-        try {
-            Address remoteAddr = new Address(InetAddress.getByName(information.get("remoteAddress")));
-            remoteUser = new User("Bob", remoteAddr);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+        LocalUser.instanciate(nickname);
 
-        try {
-            SwingUtilities.invokeAndWait(() -> Main.mainWindow = new MainWindow());
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
+        MainWindow.instantiate();
 
-        Main.mainWindow.addConversation(remoteUser);
         MessagesManager mm = MessagesManager.getInstance();
         UsersManager um = UsersManager.getInstance();
+
+        um.addListener(MainWindow.getInstance());
+
+        um.addConnectedUser(new User("BobDuPacket", Address.getMyIP()));
     }
 }

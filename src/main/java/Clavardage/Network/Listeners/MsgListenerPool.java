@@ -6,6 +6,8 @@ import Clavardage.Network.Models.MessagePacket;
 import Clavardage.Network.SocketProtocols.TCPRecvSocket;
 import Clavardage.Observers.MsgRecvListener;
 import Clavardage.Utils.Config;
+import Clavardage.Views.MainWindow;
+import Clavardage.Views.TabbedConversations;
 
 public class MsgListenerPool extends ListenerPool {
 
@@ -29,9 +31,7 @@ public class MsgListenerPool extends ListenerPool {
             MessagePacket recvPacket = new MessagePacket();
             this.srvSock.accept();
             recvPacket = (MessagePacket) this.srvSock.recv(recvPacket);
-
             currentHandler = new MsgPacketHandler(handlerId, recvPacket);
-            currentHandler.addListener(new MsgRecvListener(Main.getConversation()));
             this.pool.execute(currentHandler);
         }
     }

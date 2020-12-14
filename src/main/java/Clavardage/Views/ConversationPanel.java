@@ -4,12 +4,13 @@ import Clavardage.Models.LocalUser;
 import Clavardage.Models.Message;
 import Clavardage.Models.User;
 import Clavardage.Network.Controllers.ConversationController;
+import Clavardage.Observers.Listener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class ConversationPanel extends JPanel{
+public class ConversationPanel extends JPanel {
     private static final String SEND_TEXT_FIELD_PLACEHOLDER = "Type a message...";
 
     private final User remoteUser;

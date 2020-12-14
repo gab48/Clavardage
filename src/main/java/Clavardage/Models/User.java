@@ -26,13 +26,17 @@ public class User {
         this.nickname = nickname;
     }
 
-    @Override
-    public String toString() {
+    public String debugString() {
         return "User{" +
                 "id=" + id +
                 ", addr=" + addr +
                 ", nickname='" + nickname + '\'' +
                 '}';
+    }
+
+    @Override
+    public String toString() {
+        return this.nickname;
     }
 
     @Override
