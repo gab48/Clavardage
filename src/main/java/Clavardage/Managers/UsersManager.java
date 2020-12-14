@@ -8,8 +8,7 @@ import Clavardage.Observers.Observable;
 
 import java.util.ArrayList;
 
-public class UsersManager extends Manager implements Observable {
-
+public class UsersManager implements Manager, Observable {
     private static final UsersManager INSTANCE = new UsersManager();
 
     private final ArrayList<User> connectedUsers = new ArrayList<>();

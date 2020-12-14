@@ -1,3 +1,3 @@
 package Clavardage.Managers;
 
-public abstract class Manager {}
+public interface Manager {}

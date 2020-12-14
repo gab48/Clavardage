@@ -110,9 +110,4 @@ public class NicknameSelectionWindow extends JFrame {
             throw new IllegalStateException("Nickname should not be asked more than once.");
         }
     }
-
-    public static void main(String[] args) {
-        System.out.println(NicknameSelectionWindow.askNickname());
-    }
-
 }

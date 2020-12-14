@@ -24,6 +24,6 @@ public class MsgPacketHandler extends PacketHandler<MessagePacket>{
         User remoteUser = new User("BobDuPacket", Address.getMyIP());
 
         System.out.println("Message received : "+msg.getContent()+" at "+msg.getTime());
-        this.notifyAll(new Object[] {remoteUser, msg});
+        this.notifyAll(remoteUser, msg);
     }
 }
