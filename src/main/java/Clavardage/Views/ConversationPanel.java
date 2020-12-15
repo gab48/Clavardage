@@ -9,6 +9,7 @@ import Clavardage.Observers.Listener;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 
 public class ConversationPanel extends JPanel {
     private static final String SEND_TEXT_FIELD_PLACEHOLDER = "Type a message...";
@@ -36,17 +37,18 @@ public class ConversationPanel extends JPanel {
         this.sendTextField = new JTextField("Type a message...");
         this.defaultText = true;
         JButton sendButton = new JButton("Send");
-        Dimension dim = sendButton.getPreferredSize();
-        this.sendTextField.setPreferredSize(new Dimension(700, dim.height));
+        JButton fileButton = new JButton("File");
 
         JPanel sendPanel = new JPanel();
         sendPanel.setLayout(new BoxLayout(sendPanel, BoxLayout.LINE_AXIS));
         sendPanel.add(this.sendTextField);
         sendPanel.add(sendButton);
+        sendPanel.add(fileButton);
 
         this.add(sendPanel);
 
         sendButton.addActionListener(e -> sendMessage());
+        fileButton.addActionListener(e -> chooseFile());
 
         this.sendTextField.addFocusListener(new FocusAdapter() {
             @Override
@@ -95,6 +97,21 @@ public class ConversationPanel extends JPanel {
 
             Runnable code = () -> this.conversationController.sendMessage(message);
             new Thread(code).start();
+        }
+    }
+
+    private void chooseFile() {
+        JFileChooser fileChooser = new JFileChooser();
+        int returnValue = fileChooser.showOpenDialog(this);
+
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+
+            //TODO: Send the file
+
+            System.out.println("Hypothetically sending: " + file.getName() + ".");
+        } else {
+            System.out.println("Open command cancelled by user.");
         }
     }
 
