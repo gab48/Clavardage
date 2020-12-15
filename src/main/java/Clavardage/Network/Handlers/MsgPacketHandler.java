@@ -11,7 +11,7 @@ public class MsgPacketHandler extends PacketHandler<MessagePacket>{
 
     public MsgPacketHandler(int id, MessagePacket packet) {
         super(id, packet);
-        this.addListener(MainWindow.getInstance().conversations);
+        this.addListener(MainWindow.INSTANCE.conversations);
     }
 
     @Override
