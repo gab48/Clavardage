@@ -3,18 +3,16 @@ package Clavardage.Views;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.lang.reflect.InvocationTargetException;
 
 public class NicknameSelectionWindow extends JFrame {
 
-    private static volatile NicknameSelectionWindow INSTANCE = null;
+    private static NicknameSelectionWindow INSTANCE = null;
 
     private final JTextField nicknameField;
-    private String nickname;
+    private volatile String nickname;
 
     private NicknameSelectionWindow() {
         super("Clavardage");
@@ -51,9 +49,7 @@ public class NicknameSelectionWindow extends JFrame {
         JPanel buttonPanel = new JPanel();
         JButton connectButton = new JButton("Connect");
         connectButton.setPreferredSize(new Dimension(200, 25));
-        connectButton.addActionListener(e -> {
-            submitNickname();
-        });
+        connectButton.addActionListener(e -> submitNickname());
 
         buttonPanel.add(connectButton);
         innerPanel.add(buttonPanel);
@@ -77,10 +73,13 @@ public class NicknameSelectionWindow extends JFrame {
     }
 
     private void submitNickname() {
-        synchronized (this) {
-            this.nickname = this.nicknameField.getText();
-            this.dispose();
-            this.notifyAll();
+        String textField = this.nicknameField.getText();
+        if (textField.length() > 0) {
+            synchronized (this) {
+                this.nickname = textField;
+                this.dispose();
+                this.notifyAll();
+            }
         }
     }
 
