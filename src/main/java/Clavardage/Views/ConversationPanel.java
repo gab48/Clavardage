@@ -1,10 +1,8 @@
 package Clavardage.Views;
 
-import Clavardage.Models.LocalUser;
 import Clavardage.Models.Message;
 import Clavardage.Models.User;
 import Clavardage.Network.Controllers.ConversationController;
-import Clavardage.Observers.Listener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -87,7 +85,7 @@ public class ConversationPanel extends JPanel {
         //TODO: Never trust user input (more precisely than empty messages?)
         if (content.length() > 0 && !this.defaultText) {
             Message message = new Message(content);
-            appendMessage(LocalUser.getInstance(), message);
+            appendMessage(User.localUser, message);
             if (this.sendTextField.hasFocus()) {
                 this.sendTextField.setText("");
             } else {

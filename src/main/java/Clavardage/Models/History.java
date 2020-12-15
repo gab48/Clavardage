@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class History {
 
-    private final LocalUser localUser = LocalUser.getInstance();
     private final User remoteUser;
 
     private final ArrayList<Message> messagesHistory = new ArrayList<>();

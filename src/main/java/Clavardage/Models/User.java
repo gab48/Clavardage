@@ -6,17 +6,30 @@ import java.util.Objects;
 
 public class User {
 
-    protected int id;
-    protected Address addr;
-    protected String nickname;
+    private static boolean isLocalUserInstantiated = false;
 
-    public User(String nickname, Address addr) {
-        this.nickname = nickname;
-        this.addr = addr;
+    public static User localUser;
+
+    public static void instantiateLocalUser(String nickname) {
+        if (isLocalUserInstantiated) {
+            throw new IllegalStateException("localUser already instantiated");
+        } else {
+            User.localUser = new User(nickname, Address.getMyIP());
+            User.isLocalUserInstantiated = true;
+        }
     }
 
-    public Address getAddr() {
-        return addr;
+    protected int id;
+    protected Address address;
+    protected String nickname;
+
+    public User(String nickname, Address address) {
+        this.nickname = nickname;
+        this.address = address;
+    }
+
+    public Address getAddress() {
+        return address;
     }
 
     public String getNickname() {
@@ -30,7 +43,7 @@ public class User {
     public String debugString() {
         return "User{" +
                 "id=" + id +
-                ", addr=" + addr +
+                ", address=" + address +
                 ", nickname='" + nickname + '\'' +
                 '}';
     }
@@ -46,7 +59,7 @@ public class User {
         if (o == null) return false;
         if (this.getClass() != o.getClass()) {
             User user = (User) o;
-            return Objects.equals(this.id, user.id) && Objects.equals(this.addr, user.addr) && Objects.equals(this.nickname, user.nickname);
+            return Objects.equals(this.id, user.id) && Objects.equals(this.address, user.address) && Objects.equals(this.nickname, user.nickname);
         } else {
             return false;
         }
@@ -54,6 +67,6 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, addr, nickname);
+        return Objects.hash(id, address, nickname);
     }
 }

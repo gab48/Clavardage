@@ -8,7 +8,7 @@ public class Conversation {
     private final ArrayList<User> participants = new ArrayList<>();
 
     public Conversation(ArrayList<User> users) {
-        this.participants.add(LocalUser.getInstance());
+        this.participants.add(User.localUser);
         this.participants.addAll(users);
     }
 

@@ -2,7 +2,6 @@ package Clavardage;
 
 import Clavardage.Managers.MessagesManager;
 import Clavardage.Managers.UsersManager;
-import Clavardage.Models.LocalUser;
 import Clavardage.Models.User;
 import Clavardage.Network.Models.Address;
 import Clavardage.Views.MainWindow;
@@ -12,7 +11,7 @@ import javax.swing.*;
 
 public class Main {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException | ClassNotFoundException e) {
@@ -21,7 +20,7 @@ public class Main {
 
         String nickname = NicknameSelectionWindow.askNickname();
 
-        LocalUser.instanciate(nickname);
+        User.instantiateLocalUser(nickname);
 
         MainWindow.instantiate();
 

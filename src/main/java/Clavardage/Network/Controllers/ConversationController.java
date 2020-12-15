@@ -1,6 +1,5 @@
 package Clavardage.Network.Controllers;
 
-import Clavardage.Models.LocalUser;
 import Clavardage.Models.Message;
 import Clavardage.Models.User;
 import Clavardage.Network.Models.MessagePacket;
@@ -15,12 +14,12 @@ public class ConversationController {
 
     public int sendMessage(Message msg) {
         MessagePacket msgPckt = new MessagePacket(msg);
-        msgPckt.setSrc(LocalUser.getInstance().getAddr());
+        msgPckt.setSrc(User.localUser.getAddress());
 
 
 
         TCPSendSocket socket = new TCPSendSocket();
-        socket.connect(remoteUser.getAddr());
+        socket.connect(remoteUser.getAddress());
         int res = socket.send(msgPckt);
         socket.close();
 

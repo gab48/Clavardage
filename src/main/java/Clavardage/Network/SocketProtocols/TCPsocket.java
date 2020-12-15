@@ -15,7 +15,7 @@ public abstract class TCPsocket extends Socket{
         return connect(new Address(ip, port));
     }
     public int connect(User remoteUser) {
-        return connect(remoteUser.getAddr());
+        return connect(remoteUser.getAddress());
     }
 
     @Override
