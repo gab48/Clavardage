@@ -1,5 +1,6 @@
 package Clavardage;
 
+import Clavardage.Managers.ConversationsManager;
 import Clavardage.Managers.MessagesManager;
 import Clavardage.Managers.UsersManager;
 import Clavardage.Models.User;
@@ -27,6 +28,6 @@ public class Main {
         MessagesManager mm = MessagesManager.getInstance();
         UsersManager um = UsersManager.getInstance();
 
-        um.addConnectedUser(new User("BobDuPacket", Address.getMyIP()));
+        //um.addConnectedUser(new User("BobDuPacket", Address.getMyIP()));
     }
 }

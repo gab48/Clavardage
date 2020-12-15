@@ -29,6 +29,10 @@ public class Address {
         this(addr, Packet.DEFAULT_SRC_PORT);
     }
 
+    public Address(String str) {
+        this(str.split(":")[0], Short.parseShort(str.split(":")[1]));
+    }
+
     public static Address getMyIP() {
         try {
             InetAddress ip = InetAddress.getLocalHost();

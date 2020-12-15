@@ -1,9 +1,9 @@
 package Clavardage.Network.Handlers;
 
+import Clavardage.Managers.ConversationsManager;
+import Clavardage.Managers.UsersManager;
 import Clavardage.Models.Message;
 import Clavardage.Models.User;
-import Clavardage.Network.Controllers.CCPController;
-import Clavardage.Network.Models.Address;
 import Clavardage.Network.Models.MessagePacket;
 import Clavardage.Views.MainWindow;
 
@@ -21,7 +21,12 @@ public class MsgPacketHandler extends PacketHandler<MessagePacket>{
         Message msg = new Message();
         msg.unserialize(this.packet.serialize());
 
-        User remoteUser = new User("BobDuPacket", Address.getMyIP());
+        User remoteUser = null;
+        for(User connectedUser : UsersManager.getInstance().getConnectedUsers()) {
+            if (connectedUser.correspondTo(ConversationsManager.getInstance().getConversation(this.packet.getSrc()).getParticipants().get(1))) {
+                remoteUser = connectedUser;
+            }
+        }
 
         System.out.println("Message received : "+msg.getContent()+" at "+msg.getTime());
         this.notifyAll(remoteUser, msg);

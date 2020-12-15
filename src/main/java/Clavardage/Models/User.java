@@ -28,6 +28,10 @@ public class User {
         this.address = address;
     }
 
+    public User(Address addr) {
+        this(null, addr);
+    }
+
     public Address getAddress() {
         return address;
     }
@@ -57,7 +61,7 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null) return false;
-        if (this.getClass() != o.getClass()) {
+        if (this.getClass() == o.getClass()) {
             User user = (User) o;
             return Objects.equals(this.id, user.id) && Objects.equals(this.address, user.address) && Objects.equals(this.nickname, user.nickname);
         } else {
@@ -68,5 +72,9 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id, address, nickname);
+    }
+
+    public boolean correspondTo(User u) {
+        return this.address.toString().equals(u.address.toString());
     }
 }
