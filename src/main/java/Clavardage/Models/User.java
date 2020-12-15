@@ -61,12 +61,12 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null) return false;
-        if (this.getClass() == o.getClass()) {
-            User user = (User) o;
-            return Objects.equals(this.id, user.id) && Objects.equals(this.address, user.address) && Objects.equals(this.nickname, user.nickname);
-        } else {
-            return false;
-        }
+        if (this.getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+        return Objects.equals(this.id, user.id)
+                && Objects.equals(this.address, user.address)
+                && Objects.equals(this.nickname, user.nickname);
     }
 
     @Override

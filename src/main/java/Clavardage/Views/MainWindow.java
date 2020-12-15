@@ -2,51 +2,39 @@ package Clavardage.Views;
 
 import Clavardage.Managers.UsersManager;
 import Clavardage.Models.User;
-import Clavardage.Network.Models.Address;
 import Clavardage.Observers.Listener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 
 public class MainWindow extends JFrame implements Listener {
 
-    private static volatile MainWindow INSTANCE = null;
+    private static boolean isInstantiated = false;
+    public static MainWindow INSTANCE = null;
 
     public static void instantiate() {
-        if (MainWindow.INSTANCE == null) {
-            synchronized (MainWindow.class) {
-                if (MainWindow.INSTANCE == null) {
-                    try {
-                        SwingUtilities.invokeAndWait(() -> MainWindow.INSTANCE = new MainWindow());
-                    } catch (InvocationTargetException | InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+        if (isInstantiated) {
+            throw new IllegalStateException("MainWindow already instantiated");
+        } else {
+            MainWindow.INSTANCE = new MainWindow();
+            MainWindow.isInstantiated = true;
         }
-    }
-
-    public static MainWindow getInstance() {
-        return MainWindow.INSTANCE;
     }
 
     public final TabbedConversations conversations;
 
-    private final UsersManager usersManager = UsersManager.getInstance();
-
-    private final JList connectedUsersList = new JList();
+    private final JList<User> connectedUsersList = new JList<>();
+    private final DefaultListModel<User> listModel = new DefaultListModel<>();
 
     private MainWindow() {
         super("Clavardage");
+        this.connectedUsersList.setModel(this.listModel);
 
-        DefaultListModel model = new DefaultListModel();
-        this.connectedUsersList.setModel(model);
-        model.addAll(usersManager.getConnectedUsers());
-        this.usersManager.addListener(this);
+        UsersManager usersManager = UsersManager.getInstance();
+        this.listModel.addAll(usersManager.getConnectedUsers());
+        usersManager.addListener(this);
 
         this.connectedUsersList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.connectedUsersList.setLayoutOrientation(JList.VERTICAL);
@@ -58,9 +46,8 @@ public class MainWindow extends JFrame implements Listener {
         this.connectedUsersList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                JList list = (JList) e.getSource();
                 if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() >= 2) {
-                    User remoteUser = (User) list.getSelectedValue();
+                    User remoteUser = connectedUsersList.getSelectedValue();
                     displayConversation(remoteUser);
                 }
             }
@@ -93,25 +80,14 @@ public class MainWindow extends JFrame implements Listener {
         this.conversations.focusConversation(remoteUser);
     }
 
-    private void addConversation(User remoteUser) {
-        SwingUtilities.invokeLater(() -> {
-            conversations.addConversation(remoteUser);
-            pack();
-        });
-    }
-
     private void addConnectedUser(User u) {
-        DefaultListModel model = (DefaultListModel) this.connectedUsersList.getModel();
-        SwingUtilities.invokeLater(() -> {
-            model.addElement(u);
-        });
+        if (!this.listModel.contains(u)) {
+            SwingUtilities.invokeLater(() -> this.listModel.addElement(u));
+        }
     }
 
     private void removeConnectedUser(User u) {
-        DefaultListModel model = (DefaultListModel) this.connectedUsersList.getModel();
-        SwingUtilities.invokeLater(() -> {
-            model.removeElement(u);
-        });
+        SwingUtilities.invokeLater(() -> this.listModel.removeElement(u));
     }
 
     @Override
