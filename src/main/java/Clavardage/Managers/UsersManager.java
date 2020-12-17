@@ -3,6 +3,7 @@ package Clavardage.Managers;
 import Clavardage.Models.User;
 import Clavardage.Network.Controllers.CCPController;
 import Clavardage.Network.Listeners.CCPListenerPool;
+import Clavardage.Network.Models.Address;
 import Clavardage.Observers.Listener;
 import Clavardage.Observers.Observable;
 
@@ -20,7 +21,6 @@ public class UsersManager implements Manager, Observable {
         if (!this.connectedUsers.contains(u)) {
             this.connectedUsers.add(u);
             this.notifyAll("add", u);
-            System.out.println("Adding " + u);
         }
     }
 
@@ -42,6 +42,15 @@ public class UsersManager implements Manager, Observable {
 
     public static UsersManager getInstance() {
         return INSTANCE;
+    }
+
+    public User getUser(Address address) {
+        for(User connectedUser : this.connectedUsers) {
+            if(connectedUser.getAddress().equals(address)) {
+                return connectedUser;
+            }
+        }
+        return null;
     }
 
     @Override

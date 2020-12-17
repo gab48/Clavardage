@@ -1,16 +1,16 @@
-package Clavardage.Database.Queries;
+package Clavardage.Database.Queries.Inserts;
 
-import Clavardage.Models.User;
+import Clavardage.Database.Queries.Inserts.InsertQuery;
+import Clavardage.Database.Queries.QueryParameters;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ConversationMemberSelectQuery extends SelectQuery{
-    private static final String QUERY = "SELECT user_id FROM chat_participant WHERE room_id=? AND user_id<>?";
-    private static final int NUMBER_OF_ARGUMENTS = 1;
-
-    public ConversationMemberSelectQuery() {
+public class MessageInsertQuery extends InsertQuery {
+    private static final String QUERY = "INSERT INTO chat_message (room_id, sender, message) VALUES (?,?,?)";
+    private static final int NUMBER_OF_ARGUMENTS = 3;
+    public MessageInsertQuery() {
         super(QUERY);
     }
 
@@ -22,7 +22,8 @@ public class ConversationMemberSelectQuery extends SelectQuery{
         } else {
             try {
                 this.statement.setInt(1, (Integer) parametersList.get(0));
-                this.statement.setString(2, User.localUser.getAddress().toString());
+                this.statement.setString(2, (String) parametersList.get(1));
+                this.statement.setString(3, (String) parametersList.get(2));
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -30,3 +31,4 @@ public class ConversationMemberSelectQuery extends SelectQuery{
         return null;
     }
 }
+

@@ -16,7 +16,6 @@ public class MsgPacketHandler extends PacketHandler<MessagePacket>{
 
     @Override
     public void run() {
-        System.out.println("Processing this packet : " + this.packet);
 
         Message msg = new Message();
         msg.unserialize(this.packet.serialize());
@@ -28,7 +27,7 @@ public class MsgPacketHandler extends PacketHandler<MessagePacket>{
             }
         }
 
-        System.out.println("Message received : "+msg.getContent()+" at "+msg.getTime());
+        // System.out.println("Message received : "+msg.getContent()+" from " + remoteUser + " at "+msg.getTime());
         this.notifyAll(remoteUser, msg);
     }
 }

@@ -1,6 +1,7 @@
 package Clavardage.Models;
 
-import Clavardage.Database.Queries.ConversationMemberSelectQuery;
+import Clavardage.Database.Queries.Selects.ConversationMemberSelectQuery;
+import Clavardage.Database.Queries.Inserts.NewConversationInsertQuery;
 import Clavardage.Database.Queries.QueryParameters;
 import Clavardage.Network.Models.Address;
 import Clavardage.Utils.Storable;
@@ -10,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Conversation implements Storable {
-    private int id;
+    private int id = -1;
     private String name = null;
     private final ArrayList<User> participants = new ArrayList<>();
 
@@ -61,5 +62,14 @@ public class Conversation implements Storable {
 
     public void store() {
         System.out.println("Storing new conversation with : " + participants.get(1));
+        NewConversationInsertQuery query = new NewConversationInsertQuery();
+        QueryParameters parameters = new QueryParameters();
+
+        parameters.append(this.name);
+        parameters.append(this.participants.size());
+        query.prepare();
+        query.setParameters(parameters);
+        this.id = query.execute();
+        query.close();
     }
 }

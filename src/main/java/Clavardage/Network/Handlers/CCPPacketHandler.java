@@ -15,7 +15,6 @@ public class CCPPacketHandler extends PacketHandler<CCPPacket> {
 
     @Override
     public void run() {
-        System.out.println("Processing this packet : " + this.packet);
         User remoteUser = this.packet.getUserFromCCP();
         if(remoteUser != null) {
             switch (this.packet.getType()) {
@@ -35,7 +34,6 @@ public class CCPPacketHandler extends PacketHandler<CCPPacket> {
                 default:
                     break;
             }
-        this.um.showList();
         }
     }
 }

@@ -1,5 +1,7 @@
 package Clavardage.Models;
 
+import Clavardage.Database.Queries.Inserts.ParticipantInsertQuery;
+import Clavardage.Database.Queries.QueryParameters;
 import Clavardage.Network.Models.Address;
 
 import java.util.Objects;
@@ -42,6 +44,20 @@ public class User {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public void join(Conversation conv) {
+        if (conv.getId() != -1) {
+            ParticipantInsertQuery query = new ParticipantInsertQuery();
+            QueryParameters parameters = new QueryParameters();
+
+            parameters.append(conv.getId());
+            parameters.append(this.getAddress().toString());
+            query.prepare();
+            query.setParameters(parameters);
+            query.execute();
+            query.close();
+        }
     }
 
     public String debugString() {

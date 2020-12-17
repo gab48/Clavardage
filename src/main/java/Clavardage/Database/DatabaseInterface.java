@@ -45,6 +45,14 @@ public class DatabaseInterface {
         }
     }
 
+    public PreparedStatement prepareInsert(String sqlPrep) throws DatabaseException {
+        try {
+            return this.connection.prepareStatement(sqlPrep, Statement.RETURN_GENERATED_KEYS);
+        } catch (SQLException throwables) {
+            throw new DatabaseException("statement preparation failed");
+        }
+    }
+
     public ResultSet executeSelect(PreparedStatement statement) throws DatabaseException {
         try {
             return statement.executeQuery();
@@ -57,6 +65,18 @@ public class DatabaseInterface {
     public int executeUpdate(PreparedStatement statement) throws DatabaseException {
         try {
             return statement.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            throw new DatabaseException("excute statement failed");
+        }
+    }
+
+    public int executeInsert(PreparedStatement statement) throws DatabaseException {
+        try {
+            statement.executeUpdate();
+            ResultSet resultSet = statement.getGeneratedKeys();
+            resultSet.next();
+            return resultSet.getInt(1);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             throw new DatabaseException("excute statement failed");

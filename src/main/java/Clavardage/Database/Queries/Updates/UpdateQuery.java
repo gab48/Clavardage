@@ -1,6 +1,9 @@
-package Clavardage.Database.Queries;
+package Clavardage.Database.Queries.Updates;
 
 import Clavardage.Database.DatabaseException;
+import Clavardage.Database.Queries.DatabaseQuery;
+
+import java.sql.Statement;
 
 public abstract class UpdateQuery extends DatabaseQuery {
     public UpdateQuery(String sql) {

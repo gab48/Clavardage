@@ -1,6 +1,6 @@
 package Clavardage.Managers;
 
-import Clavardage.Database.Queries.ConversationsSelectQuery;
+import Clavardage.Database.Queries.Selects.ConversationsSelectQuery;
 import Clavardage.Database.Queries.QueryParameters;
 import Clavardage.Models.Conversation;
 import Clavardage.Models.User;
@@ -38,14 +38,13 @@ public class ConversationsManager implements Manager {
         return INSTANCE;
     }
 
-    public void createConversation(User remoteUser) {
+    public Conversation createConversation(User remoteUser) {
         Conversation newConversation = new Conversation(remoteUser);
         newConversation.store();
-        this.newConversation(remoteUser);
-    }
-
-    public void newConversation(User remoteUser) {
-        this.startedConversations.add(new Conversation(remoteUser));
+        User.localUser.join(newConversation);
+        remoteUser.join(newConversation);
+        this.startedConversations.add(newConversation);
+        return newConversation;
     }
 
     public Conversation getConversation(Address remoteUserAddr) {
@@ -56,7 +55,10 @@ public class ConversationsManager implements Manager {
                 }
             }
         }
-        return null;
+
+        // If conversation not found, we create a new one
+        User newUser = UsersManager.getInstance().getUser(remoteUserAddr);
+        return this.createConversation(newUser);
     }
 
     public ArrayList<Conversation> getStartedConversations() {
