@@ -56,8 +56,6 @@ public class Message implements Serializable {
     public void unserialize(byte[] bytes) {
         String string = new String(bytes);
         String[] result = string.split(Serializable.SEPARATOR+"(?!.*"+Serializable.SEPARATOR+")");
-        System.out.println(result.length);
-        System.out.println(result[0]);
         this.content = result[0];
         this.timestamp = new Timestamp(Long.decode(result[1]));
     }

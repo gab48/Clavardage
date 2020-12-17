@@ -6,8 +6,6 @@ import Clavardage.Managers.ConversationsManager;
 import Clavardage.Models.Conversation;
 import Clavardage.Models.Message;
 
-import java.nio.charset.StandardCharsets;
-
 public interface Storable<T extends MessagePacket> extends PacketBasics {
     default void store() {
         MessageInsertQuery msgInQ = new MessageInsertQuery();

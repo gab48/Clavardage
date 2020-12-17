@@ -61,7 +61,6 @@ public class Conversation implements Storable {
     public void setName(String name) { this.name = name; }
 
     public void store() {
-        System.out.println("Storing new conversation with : " + participants.get(1));
         NewConversationInsertQuery query = new NewConversationInsertQuery();
         QueryParameters parameters = new QueryParameters();
 

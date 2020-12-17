@@ -21,8 +21,6 @@ public class ParticipantInsertQuery extends InsertQuery{
             System.err.println(NUMBER_OF_ARGUMENTS + " arguments needed");
         } else {
             try {
-                System.out.println(parametersList.get(0));
-                System.out.println(parametersList.get(1));
                 this.statement.setInt(1, (Integer) parametersList.get(0));
                 this.statement.setString(2, (String) parametersList.get(1));
             } catch (SQLException throwables) {
