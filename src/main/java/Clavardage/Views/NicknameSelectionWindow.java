@@ -31,7 +31,6 @@ public class NicknameSelectionWindow extends JFrame {
         nicknamePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         nicknamePanel.setAlignmentY(Component.CENTER_ALIGNMENT);
         this.nicknameField = new JTextField();
-        this.nicknameField.setPreferredSize(new Dimension(100, 20));
         this.nicknameField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
