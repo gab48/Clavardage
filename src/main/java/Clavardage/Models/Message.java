@@ -2,17 +2,20 @@ package Clavardage.Models;
 
 import Clavardage.Utils.Serializable;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Message implements Serializable {
 
     private String content;
-    private Long timestamp;
+    private Timestamp timestamp;
 
-    public Message (String content, Long timestamp) {
+    public Message (String content, Long timestampL) {
         this.content = content;
-        this.timestamp = timestamp;
+        if (timestampL != null) {
+            this.timestamp = new Timestamp(timestampL);
+        }
     }
 
     public Message (String content) {
@@ -26,12 +29,12 @@ public class Message implements Serializable {
         return content;
     }
 
-    public Long getTimestamp() {
-        return timestamp;
+    public Timestamp getTimestamp() {
+        return this.timestamp;
     }
 
     public String getTime() {
-        Date date = new Date(this.getTimestamp());
+        Date date = new Date(this.timestamp.getTime());
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
         return formatter.format(date);
     }
@@ -46,7 +49,7 @@ public class Message implements Serializable {
 
     @Override
     public byte[] serialize() {
-        return (this.content + Serializable.SEPARATOR + this.timestamp).getBytes();
+        return (this.content + Serializable.SEPARATOR + this.timestamp.getTime()).getBytes();
     }
 
     @Override
@@ -56,6 +59,6 @@ public class Message implements Serializable {
         System.out.println(result.length);
         System.out.println(result[0]);
         this.content = result[0];
-        this.timestamp = Long.decode(result[1]);
+        this.timestamp = new Timestamp(Long.decode(result[1]));
     }
 }
