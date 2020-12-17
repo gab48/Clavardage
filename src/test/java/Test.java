@@ -1,4 +1,3 @@
-import Clavardage.Database.Queries.Inserts.MessageInsertQuery;
 import Clavardage.Database.Queries.Inserts.NewConversationInsertQuery;
 import Clavardage.Database.Queries.QueryParameters;
 

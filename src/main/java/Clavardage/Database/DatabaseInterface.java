@@ -28,10 +28,9 @@ public class DatabaseInterface {
         PASSWD = Config.get("DB_PASSWORD");
     }
 
-    public Connection connect() throws DatabaseException {
+    public void connect() throws DatabaseException {
         try {
             this.connection = DriverManager.getConnection(DB_URI, LOGIN, PASSWD);
-            return this.connection;
         } catch (SQLException throwables) {
             throw new DatabaseException("unable to connect to database");
         }

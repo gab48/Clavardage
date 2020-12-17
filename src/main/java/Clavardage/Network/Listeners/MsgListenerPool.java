@@ -1,17 +1,13 @@
 package Clavardage.Network.Listeners;
 
-import Clavardage.Main;
 import Clavardage.Network.Handlers.MsgPacketHandler;
 import Clavardage.Network.Models.MessagePacket;
 import Clavardage.Network.SocketProtocols.TCPRecvSocket;
-import Clavardage.Observers.MsgRecvListener;
 import Clavardage.Utils.Config;
-import Clavardage.Views.MainWindow;
-import Clavardage.Views.TabbedConversations;
 
 public class MsgListenerPool extends ListenerPool {
 
-    private TCPRecvSocket srvSock;
+    private final TCPRecvSocket srvSock;
 
     public MsgListenerPool() {
         super(Integer.parseInt(Config.get("MSG_LISTENER_POOL_SIZE")));

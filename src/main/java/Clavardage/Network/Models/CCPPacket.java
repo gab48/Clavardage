@@ -28,7 +28,6 @@ public class CCPPacket extends Packet {
     }
 
     public CCPPacket() { super(); }
-    public CCPPacket(byte[] bytes) { super(bytes); }
 
     public int getType() { return type; }
     public void setDestAddr (Address addr) {

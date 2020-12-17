@@ -22,7 +22,7 @@ public class User {
     }
 
     protected int id;
-    protected Address address;
+    protected final Address address;
     protected String nickname;
 
     public User(String nickname, Address address) {

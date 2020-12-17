@@ -7,7 +7,7 @@ import java.io.IOException;
 public class TCPSendSocket extends TCPsocket{
 
     @Override
-    public int connect(Address addr) {
+    public void connect(Address addr) {
         this.remoteAddr = addr;
         try {
             this.link = new java.net.Socket(this.remoteAddr.getIp(), this.remoteAddr.getPort());
@@ -16,7 +16,6 @@ public class TCPSendSocket extends TCPsocket{
             e.printStackTrace();
             System.err.println("Connection refused");
         }
-        return 0;
     }
 
     @Override

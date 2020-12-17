@@ -7,7 +7,7 @@ import Clavardage.Utils.Config;
 
 public class CCPListenerPool extends ListenerPool {
 
-    private CCPsocket srvSock;
+    private final CCPsocket srvSock;
 
     public CCPListenerPool() {
         super(Integer.parseInt(Config.get("CCP_LISTENER_POOL_SIZE")));

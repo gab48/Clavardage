@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 public abstract class PacketHandler<T extends Packet> implements Runnable, Observable {
 
-    protected int id;
-    protected T packet;
-    protected ArrayList<Listener> listeners = new ArrayList<>();
+    protected final int id;
+    protected final T packet;
+    protected final ArrayList<Listener> listeners = new ArrayList<>();
 
     public PacketHandler (int id, T packet){
         this.id = id;

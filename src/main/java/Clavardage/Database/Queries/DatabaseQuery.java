@@ -23,7 +23,7 @@ public abstract class DatabaseQuery {
         }
     }
 
-    public abstract PreparedStatement setParameters(QueryParameters parameters);
+    public abstract void setParameters(QueryParameters parameters);
 
     public void close() {
         try {

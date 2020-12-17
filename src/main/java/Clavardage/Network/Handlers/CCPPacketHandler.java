@@ -7,7 +7,7 @@ import Clavardage.Network.Models.CCPPacket;
 
 public class CCPPacketHandler extends PacketHandler<CCPPacket> {
 
-    private UsersManager um = UsersManager.getInstance();
+    private final UsersManager um = UsersManager.getInstance();
 
     public CCPPacketHandler(int id, CCPPacket packet) {
         super(id, packet);

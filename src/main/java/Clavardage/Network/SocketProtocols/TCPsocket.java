@@ -1,6 +1,5 @@
 package Clavardage.Network.SocketProtocols;
 
-import Clavardage.Models.User;
 import Clavardage.Network.Models.Address;
 import Clavardage.Network.Models.Packet;
 
@@ -10,13 +9,7 @@ public abstract class TCPsocket extends Socket{
     protected Address remoteAddr;
     protected TCPStreams      streams = null;
 
-    public int connect(Address addr) { return 0; }
-    public int connect(String ip, short port) {
-        return connect(new Address(ip, port));
-    }
-    public int connect(User remoteUser) {
-        return connect(remoteUser.getAddress());
-    }
+    public void connect(Address addr) {}
 
     @Override
     public int send(Packet packet) {

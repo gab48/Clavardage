@@ -16,7 +16,7 @@ public class ConversationController {
         this.currentConversation = ConversationsManager.getInstance().getConversation(this.remoteUser.getAddress());
     }
 
-    public int sendMessage(Message msg) {
+    public void sendMessage(Message msg) {
         MessagePacket msgPckt = new MessagePacket(msg, this.remoteUser.getAddress());
         msgPckt.setSrc(User.localUser.getAddress());
 
@@ -26,8 +26,6 @@ public class ConversationController {
         socket.close();
 
         msgPckt.store();
-
-        return res;
     }
 
 }

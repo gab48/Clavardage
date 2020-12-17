@@ -2,7 +2,6 @@ package Clavardage.Database.Queries.Inserts;
 
 import Clavardage.Database.Queries.QueryParameters;
 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -15,7 +14,7 @@ public class ParticipantInsertQuery extends InsertQuery{
     }
 
     @Override
-    public PreparedStatement setParameters(QueryParameters parameters) {
+    public void setParameters(QueryParameters parameters) {
         ArrayList<Object> parametersList = parameters.getParam();
         if (parametersList.size() != NUMBER_OF_ARGUMENTS) {
             System.err.println(NUMBER_OF_ARGUMENTS + " arguments needed");
@@ -27,6 +26,5 @@ public class ParticipantInsertQuery extends InsertQuery{
                 throwables.printStackTrace();
             }
         }
-        return null;
     }
 }

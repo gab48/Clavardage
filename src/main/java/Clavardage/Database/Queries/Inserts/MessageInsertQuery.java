@@ -1,9 +1,7 @@
 package Clavardage.Database.Queries.Inserts;
 
-import Clavardage.Database.Queries.Inserts.InsertQuery;
 import Clavardage.Database.Queries.QueryParameters;
 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -16,7 +14,7 @@ public class MessageInsertQuery extends InsertQuery {
     }
 
     @Override
-    public PreparedStatement setParameters(QueryParameters parameters) {
+    public void setParameters(QueryParameters parameters) {
         ArrayList<Object> parametersList = parameters.getParam();
         if (parametersList.size() != NUMBER_OF_ARGUMENTS) {
             System.err.println(NUMBER_OF_ARGUMENTS + " arguments needed");
@@ -30,7 +28,6 @@ public class MessageInsertQuery extends InsertQuery {
                 throwables.printStackTrace();
             }
         }
-        return null;
     }
 }
 
