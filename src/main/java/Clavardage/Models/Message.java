@@ -1,5 +1,6 @@
 package Clavardage.Models;
 
+import Clavardage.Network.Models.Address;
 import Clavardage.Utils.Serializable;
 
 import java.sql.Timestamp;
@@ -9,7 +10,14 @@ import java.util.Date;
 public class Message implements Serializable {
 
     private String content;
+    private String sender;
     private Timestamp timestamp;
+
+    public Message(String sender, String content, Timestamp created_at) {
+        this.content = content;
+        this.sender = sender;
+        this.timestamp = created_at;
+    }
 
     public Message (String content, Long timestampL) {
         this.content = content;
@@ -28,7 +36,7 @@ public class Message implements Serializable {
     public String getContent() {
         return content;
     }
-
+    public String getSender() {return sender; }
     public Timestamp getTimestamp() {
         return this.timestamp;
     }
@@ -44,6 +52,7 @@ public class Message implements Serializable {
         return "Message{" +
                 "content='" + content + '\'' +
                 ", timestamp=" + timestamp +
+                ", sender="+ sender +
                 '}';
     }
 

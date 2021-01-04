@@ -1,5 +1,6 @@
 package Clavardage;
 
+import Clavardage.Managers.ConversationsManager;
 import Clavardage.Managers.MessagesManager;
 import Clavardage.Managers.UsersManager;
 import Clavardage.Models.User;
@@ -23,7 +24,8 @@ public class Main {
 
         MainWindow.instantiate();
 
-        MessagesManager mm = MessagesManager.getInstance();
-        UsersManager um = UsersManager.getInstance();
+        MessagesManager         mm = MessagesManager.getInstance();
+        UsersManager            um = UsersManager.getInstance();
+        ConversationsManager    cm = ConversationsManager.getInstance();
     }
 }
