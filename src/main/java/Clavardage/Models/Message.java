@@ -1,6 +1,5 @@
 package Clavardage.Models;
 
-import Clavardage.Network.Models.Address;
 import Clavardage.Utils.Serializable;
 
 import java.sql.Timestamp;
@@ -9,6 +8,9 @@ import java.util.Date;
 
 public class Message implements Serializable {
 
+    public enum MessageType { TEXT, FILE }
+
+    private MessageType type = MessageType.TEXT;
     private String content;
     private String sender;
     private Timestamp timestamp;
@@ -33,10 +35,9 @@ public class Message implements Serializable {
         this(null, null);
     }
 
-    public String getContent() {
-        return content;
-    }
-    public String getSender() {return sender; }
+    public MessageType getType()    { return type; }
+    public String getContent()      { return content; }
+    public String getSender()       { return sender; }
     public Timestamp getTimestamp() {
         return this.timestamp;
     }
@@ -53,19 +54,26 @@ public class Message implements Serializable {
                 "content='" + content + '\'' +
                 ", timestamp=" + timestamp +
                 ", sender="+ sender +
+                ", type=" + type +
                 '}';
     }
 
     @Override
     public byte[] serialize() {
-        return (this.content + Serializable.SEPARATOR + this.timestamp.getTime()).getBytes();
+        return (this.content + Serializable.SEPARATOR + this.type + Serializable.SEPARATOR + this.timestamp.getTime()).getBytes();
     }
 
     @Override
     public void unserialize(byte[] bytes) {
         String string = new String(bytes);
-        String[] result = string.split(Serializable.SEPARATOR+"(?!.*"+Serializable.SEPARATOR+")");
-        this.content = result[0];
+        String regex = Serializable.SEPARATOR+"(?!.*"+Serializable.SEPARATOR+")";
+
+        String[] result = string.split(regex);
         this.timestamp = new Timestamp(Long.decode(result[1]));
+
+        result = result[0].split(regex);
+        this.type = MessageType.valueOf(result[1]);
+
+        this.content = result[0];
     }
 }

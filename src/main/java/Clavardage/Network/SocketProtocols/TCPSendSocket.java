@@ -1,21 +1,18 @@
 package Clavardage.Network.SocketProtocols;
 
 import Clavardage.Network.Models.Address;
+import Clavardage.Network.Models.MessagePacket;
 
 import java.io.IOException;
+import java.net.Socket;
 
-public class TCPSendSocket extends TCPsocket{
+public class TCPSendSocket extends TCPsocket<MessagePacket> {
 
-    @Override
-    public void connect(Address addr) {
+    public Socket connect(Address addr) {
         this.remoteAddr = addr;
-        try {
-            this.link = new java.net.Socket(this.remoteAddr.getIp(), this.remoteAddr.getPort());
-            this.streams = new TCPStreams(this.link);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Connection refused");
-        }
+        this.link = super.connect(addr);
+        this.streams = new TCPStreams<>(this.link);
+        return this.link;
     }
 
     @Override

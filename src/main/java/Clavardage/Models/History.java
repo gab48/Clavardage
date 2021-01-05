@@ -2,7 +2,6 @@ package Clavardage.Models;
 
 import Clavardage.Database.Queries.QueryParameters;
 import Clavardage.Database.Queries.Selects.HistorySelectQuery;
-import Clavardage.Network.Models.Address;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,11 +34,6 @@ public class History {
             e.printStackTrace();
         }
         query.close();
-
-    }
-
-    public void append(Message msg) {
-        this.messagesHistory.add(msg);
 
     }
 

@@ -3,6 +3,9 @@ package Clavardage.Views;
 import Clavardage.Models.Message;
 import Clavardage.Models.User;
 import Clavardage.Network.Controllers.ConversationController;
+import Clavardage.Network.Models.Address;
+import Clavardage.Network.Models.FilePacket;
+import Clavardage.Network.SocketProtocols.FileSocket;
 
 import javax.swing.*;
 import java.awt.*;
@@ -106,6 +109,11 @@ public class ConversationPanel extends JPanel {
             File file = fileChooser.getSelectedFile();
 
             //TODO: Send the file
+            FileSocket fs = new FileSocket();
+            Address remoteFileBuffer = new Address(this.remoteUser.getAddress().getIp(), (short) 1922);
+            fs.connect(remoteFileBuffer);
+            fs.send(new FilePacket(file, remoteFileBuffer));
+            fs.close();
 
             System.out.println("Hypothetically sending: " + file.getName() + ".");
         } else {

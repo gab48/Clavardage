@@ -34,7 +34,6 @@ public class Conversation implements Storable {
     public Conversation(int id) {
         this.id = id;
         this.history = new History(id);
-        this.history.printHistory();
         this.participants.add(0, User.localUser);
 
         ConversationMemberSelectQuery query = new ConversationMemberSelectQuery();

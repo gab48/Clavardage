@@ -11,7 +11,7 @@ import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
 import java.util.Objects;
 
-public class CCPsocket extends Socket{
+public class CCPsocket extends Socket<Packet>{
 
     protected static final int PAYLOAD_MAX_SIZE = 8192;
     protected MulticastSocket socket;
