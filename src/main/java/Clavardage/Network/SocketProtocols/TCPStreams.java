@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class TCPStreams {
+public class TCPStreams<T extends Packet> {
 
     private PrintWriter     writer = null;
     private BufferedReader  reader = null;
@@ -23,11 +23,11 @@ public class TCPStreams {
         }
     }
 
-    public void send(Packet packet) {
+    public void send(T packet) {
         this.writer.println(new String(packet.serialize()));
     }
 
-    public Packet recv(Packet packet) {
+    public T recv(T packet) {
         try {
             String buf = this.reader.readLine();
             packet.unserialize(buf.getBytes());

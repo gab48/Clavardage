@@ -3,25 +3,22 @@ package Clavardage.Network.SocketProtocols;
 import Clavardage.Network.Models.Address;
 import Clavardage.Network.Models.Packet;
 
-public abstract class TCPsocket extends Socket{
+public abstract class TCPsocket<T extends Packet> extends Socket<T> implements Connectable {
 
-    protected java.net.Socket link    = null;
-    protected Address remoteAddr;
-    protected TCPStreams      streams = null;
-
-    public void connect(Address addr) {}
+    protected java.net.Socket   link    = null;
+    protected Address           remoteAddr;
+    protected TCPStreams<T> streams = null;
 
     @Override
-    public int send(Packet packet) {
+    public int send(T packet) {
         this.streams.send(packet);
         return 0;
     }
 
     @Override
-    public Packet recv(Packet packet) {
+    public T recv(T packet) {
         packet = this.streams.recv(packet);
         packet.setSrc(new Address(this.link.getInetAddress()));
         return packet;
     }
-
 }

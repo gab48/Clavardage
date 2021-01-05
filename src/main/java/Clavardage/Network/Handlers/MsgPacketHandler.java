@@ -27,7 +27,6 @@ public class MsgPacketHandler extends PacketHandler<MessagePacket>{
             }
         }
 
-        // System.out.println("Message received : "+msg.getContent()+" from " + remoteUser + " at "+msg.getTime());
         this.notifyAll(remoteUser, msg);
     }
 }

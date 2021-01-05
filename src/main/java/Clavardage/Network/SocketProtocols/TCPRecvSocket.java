@@ -1,9 +1,11 @@
 package Clavardage.Network.SocketProtocols;
 
+import Clavardage.Network.Models.MessagePacket;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 
-public class TCPRecvSocket extends TCPsocket {
+public class TCPRecvSocket extends TCPsocket<MessagePacket> {
 
     private ServerSocket    srv     = null;
 
@@ -19,7 +21,7 @@ public class TCPRecvSocket extends TCPsocket {
     public int accept() {
         try {
             this.link = this.srv.accept();
-            this.streams = new TCPStreams(this.link);
+            this.streams = new TCPStreams<>(this.link);
         } catch (IOException e) {
             return -1;
         }
