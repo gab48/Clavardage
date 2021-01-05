@@ -6,8 +6,7 @@ import Clavardage.Observers.Listener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
 public class MainWindow extends JFrame implements Listener {
 
@@ -40,18 +39,31 @@ public class MainWindow extends JFrame implements Listener {
         this.connectedUsersList.setLayoutOrientation(JList.VERTICAL);
         this.connectedUsersList.setVisibleRowCount(10);
 
-        JScrollPane listScroll = new JScrollPane(this.connectedUsersList);
-        listScroll.setPreferredSize(new Dimension(250, 80));
-
         this.connectedUsersList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() >= 2) {
                     User remoteUser = connectedUsersList.getSelectedValue();
                     displayConversation(remoteUser);
+                    System.out.println("Click");
                 }
             }
         });
+
+        JScrollPane listScroll = new JScrollPane(this.connectedUsersList);
+        listScroll.setPreferredSize(new Dimension(250, 80));
+
+        JLabel listLabel = new JLabel("<html><body><b>Connected users:</b></body></html>" +
+                "");
+
+        JPanel listTitle = new JPanel();
+        listTitle.add(listLabel);
+        listTitle.setMaximumSize(listTitle.getPreferredSize());
+
+        JPanel listPanel = new JPanel();
+        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.PAGE_AXIS));
+        listPanel.add(listTitle);
+        listPanel.add(listScroll);
 
         JPanel subPanel = new JPanel();
         subPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
@@ -61,12 +73,19 @@ public class MainWindow extends JFrame implements Listener {
 
         JPanel entirePanel = new JPanel();
         entirePanel.setLayout(new BoxLayout(entirePanel, BoxLayout.LINE_AXIS));
-
-        entirePanel.add(listScroll);
+        entirePanel.add(listPanel);
         entirePanel.add(subPanel);
 
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                stop();
+                System.exit(0);
+            }
+        });
+
         this.setContentPane(entirePanel);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -84,6 +103,10 @@ public class MainWindow extends JFrame implements Listener {
         if (!this.listModel.contains(u)) {
             SwingUtilities.invokeLater(() -> this.listModel.addElement(u));
         }
+    }
+
+    private void stop() {
+        //TODO: Stop things that need to be stopped
     }
 
     private void removeConnectedUser(User u) {
