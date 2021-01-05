@@ -14,6 +14,7 @@ public class Conversation implements Storable {
     private int id = -1;
     private String name = null;
     private final ArrayList<User> participants = new ArrayList<>();
+    private History history = null;
 
     public Conversation(ArrayList<User> users) {
         this.participants.add(0, User.localUser);
@@ -32,6 +33,8 @@ public class Conversation implements Storable {
 
     public Conversation(int id) {
         this.id = id;
+        this.history = new History(id);
+        this.history.printHistory();
         this.participants.add(0, User.localUser);
 
         ConversationMemberSelectQuery query = new ConversationMemberSelectQuery();
