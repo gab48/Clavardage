@@ -45,7 +45,6 @@ public class MainWindow extends JFrame implements Listener {
                 if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() >= 2) {
                     User remoteUser = connectedUsersList.getSelectedValue();
                     displayConversation(remoteUser);
-                    System.out.println("Click");
                 }
             }
         });
@@ -53,8 +52,7 @@ public class MainWindow extends JFrame implements Listener {
         JScrollPane listScroll = new JScrollPane(this.connectedUsersList);
         listScroll.setPreferredSize(new Dimension(250, 80));
 
-        JLabel listLabel = new JLabel("<html><body><b>Connected users:</b></body></html>" +
-                "");
+        JLabel listLabel = new JLabel("<html><body><b>Connected users:</b></body></html>");
 
         JPanel listTitle = new JPanel();
         listTitle.add(listLabel);
@@ -92,8 +90,8 @@ public class MainWindow extends JFrame implements Listener {
     }
 
     private void displayConversation(User remoteUser) {
-        ConversationPanel conversation = this.conversations.getConversation(remoteUser);
-        if (conversation == null) {
+        ConversationPanel conversationPanel = this.conversations.getConversation(remoteUser);
+        if (conversationPanel == null) {
             this.conversations.addConversation(remoteUser);
         }
         this.conversations.focusConversation(remoteUser);

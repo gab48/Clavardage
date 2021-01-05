@@ -1,5 +1,8 @@
 package Clavardage.Views;
 
+import Clavardage.Managers.ConversationsManager;
+import Clavardage.Models.Conversation;
+import Clavardage.Models.History;
 import Clavardage.Models.Message;
 import Clavardage.Models.User;
 import Clavardage.Network.Controllers.ConversationController;
@@ -30,6 +33,7 @@ public class ConversationPanel extends JPanel {
         this.conversationTextArea = new JTextArea();
         this.conversationTextArea.setEditable(false);
         this.conversationTextArea.setPreferredSize(new Dimension(800, 450));
+        this.loadHistory();
         this.add(this.conversationTextArea);
 
         this.sendTextField = new JTextField("Type a message...");
@@ -110,6 +114,21 @@ public class ConversationPanel extends JPanel {
             System.out.println("Hypothetically sending: " + file.getName() + ".");
         } else {
             System.out.println("Open command cancelled by user.");
+        }
+    }
+
+    private void loadHistory() {
+        ConversationsManager conversationsManager = ConversationsManager.getInstance();
+        Conversation conversation = conversationsManager.getConversation(this.remoteUser.getAddress());
+        History history = conversation.getHistory();
+        for (Message message : history.getMessagesHistory()) {
+            System.out.printf("sender: %s\n", message.getSender());
+            System.out.printf("local:  %s\n", User.localUser.getAddress().toString());
+            if (message.getSender().equals(User.localUser.getAddress().toString())) {
+                appendMessage(User.localUser, message);
+            } else {
+                appendMessage(this.remoteUser, message);
+            }
         }
     }
 
