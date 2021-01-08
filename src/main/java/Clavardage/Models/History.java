@@ -26,7 +26,8 @@ public class History {
                 this.messagesHistory.add(new Message(
                         resultSet.getString("sender"),
                         resultSet.getString("message"),
-                        resultSet.getTimestamp("created_at")
+                        resultSet.getTimestamp("created_at"),
+                        Message.MessageType.valueOf(resultSet.getString("type"))
                 ));
             }
             resultSet.close();
@@ -34,7 +35,6 @@ public class History {
             e.printStackTrace();
         }
         query.close();
-
     }
 
     public ArrayList<Message> getMessagesHistory() {

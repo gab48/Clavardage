@@ -10,22 +10,28 @@ public class Message implements Serializable {
 
     public enum MessageType { TEXT, FILE }
 
-    private MessageType type = MessageType.TEXT;
+    private MessageType type;
     private String content;
     private String sender;
     private Timestamp timestamp;
 
-    public Message(String sender, String content, Timestamp created_at) {
+    public Message(String sender, String content, Timestamp created_at, MessageType type) {
+        this.type = type;
         this.content = content;
         this.sender = sender;
         this.timestamp = created_at;
     }
 
-    public Message (String content, Long timestampL) {
+    public Message(String content, Long timestampL, MessageType type) {
         this.content = content;
+        this.type = type;
         if (timestampL != null) {
             this.timestamp = new Timestamp(timestampL);
         }
+    }
+
+    public Message (String content, Long timestampL) {
+        this(content, timestampL, MessageType.TEXT);
     }
 
     public Message (String content) {

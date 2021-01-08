@@ -18,6 +18,7 @@ public interface Storable<T extends MessagePacket> extends PacketBasics {
         queryParameters.append(this.getSrc().toString());
         queryParameters.append(msg.getContent());
         queryParameters.append(msg.getTimestamp());
+        queryParameters.append(msg.getType());
 
         msgInQ.prepare();
         msgInQ.setParameters(queryParameters);
