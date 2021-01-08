@@ -6,8 +6,8 @@ import java.io.OutputStream;
 
 public class FileStreams {
 
-    private InputStream inputStream;
-    private OutputStream outputStream;
+    private final InputStream inputStream;
+    private final OutputStream outputStream;
 
     public FileStreams(InputStream input, OutputStream output) {
         this.inputStream = input;

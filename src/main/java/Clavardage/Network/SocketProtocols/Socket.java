@@ -3,8 +3,6 @@ package Clavardage.Network.SocketProtocols;
 import Clavardage.Network.Models.Packet;
 import Clavardage.Network.Types.ProtocolType;
 
-import java.io.IOException;
-
 public abstract class Socket<T extends Packet> {
 
     protected ProtocolType protocol;
@@ -18,11 +16,9 @@ public abstract class Socket<T extends Packet> {
         this((short) 0);
     }
 
-    public int accept() {
-        return 0;
-    }
-    public abstract int send(T packet) throws IOException;
-    public abstract T recv(T packet) throws IOException;
+    public int accept() { return 0; }
+    public abstract int send(T packet);
+    public abstract T recv(T packet);
     public abstract int close();
 
 }

@@ -1,11 +1,14 @@
 package Clavardage.Network.SocketProtocols;
 
+import Clavardage.Models.Message;
 import Clavardage.Network.Models.Address;
 import Clavardage.Network.Models.FilePacket;
+import Clavardage.Network.Models.MessagePacket;
 import Clavardage.Utils.Config;
 
 import java.io.*;
 import java.net.ServerSocket;
+import java.util.Date;
 
 public class FileSocket extends TCPsocket<FilePacket> {
 
@@ -25,7 +28,6 @@ public class FileSocket extends TCPsocket<FilePacket> {
     @Override
     public java.net.Socket connect(Address addr) {
         this.remoteAddr = addr;
-        this.link = super.connect(addr);
         return this.link;
     }
 
@@ -40,10 +42,38 @@ public class FileSocket extends TCPsocket<FilePacket> {
         return 0;
     }
 
+    private void sendFileName(FilePacket packet) {
+        String filename = packet.getFileName();
+        Address destination = new Address(packet.getDest().getIp(), Short.parseShort(Config.get("NETWORK_TCP_SRV_PORT")));
+        Address source = packet.getSrc();
+
+        Message filenameMessage = new Message(filename, (new Date()).getTime(), Message.MessageType.FILE);
+        MessagePacket filenamePacket = new MessagePacket(filenameMessage, destination);
+        filenamePacket.setSrc(source);
+
+        TCPSendSocket socket = new TCPSendSocket();
+        socket.connect(destination);
+        socket.send(filenamePacket);
+        filenamePacket.store();
+
+        // Wait for ack filename ack
+        MessagePacket ack = new MessagePacket();
+        ack = socket.recv(ack);
+        Message ackMessage = new Message();
+        ackMessage.unserialize(ack.serialize());
+        if (ackMessage.getType().compareTo(Message.MessageType.FILE_ACK) != 0) {
+            System.exit(-8000);
+        }
+
+        socket.close();
+    }
+
     @Override
     public int send(FilePacket packet) {
 
-        // TODO: Send FileName
+        this.sendFileName(packet);
+
+        this.link = super.connect(this.remoteAddr);
 
         long length = packet.getFileLength();
         byte[] bytes = new byte[1024];
@@ -66,7 +96,7 @@ public class FileSocket extends TCPsocket<FilePacket> {
     public FilePacket recv(FilePacket packet) {
 
         // TODO: Receive Filename
-        String filename = "testcopy.txt";
+        String filename = packet.getFileName();
 
         try {
             this.fileStreams = new FileStreams(

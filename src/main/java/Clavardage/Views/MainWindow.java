@@ -1,5 +1,6 @@
 package Clavardage.Views;
 
+import Clavardage.Managers.MessagesManager;
 import Clavardage.Managers.UsersManager;
 import Clavardage.Models.User;
 import Clavardage.Observers.Listener;
@@ -104,7 +105,8 @@ public class MainWindow extends JFrame implements Listener {
     }
 
     private void stop() {
-        //TODO: Stop things that need to be stopped
+        MessagesManager.getInstance().stop();
+        UsersManager.getInstance().stop();
     }
 
     private void removeConnectedUser(User u) {

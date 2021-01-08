@@ -64,4 +64,7 @@ public class ConversationsManager implements Manager {
     public ArrayList<Conversation> getStartedConversations() {
         return startedConversations;
     }
+
+    @Override
+    public void stop() {}
 }

@@ -5,13 +5,19 @@ import Clavardage.Managers.UsersManager;
 import Clavardage.Models.Message;
 import Clavardage.Models.User;
 import Clavardage.Network.Models.MessagePacket;
+import Clavardage.Network.SocketProtocols.TCPRecvSocket;
+import Clavardage.Observers.FileRecvListener;
 import Clavardage.Views.MainWindow;
 
 public class MsgPacketHandler extends PacketHandler<MessagePacket>{
 
-    public MsgPacketHandler(int id, MessagePacket packet) {
+    private final TCPRecvSocket link;
+
+    public MsgPacketHandler(int id, MessagePacket packet, TCPRecvSocket link) {
         super(id, packet);
+        this.link = link;
         this.addListener(MainWindow.INSTANCE.conversations);
+        this.addListener(FileRecvListener.getINSTANCE());
     }
 
     @Override
@@ -27,6 +33,6 @@ public class MsgPacketHandler extends PacketHandler<MessagePacket>{
             }
         }
 
-        this.notifyAll(remoteUser, msg);
+        this.notifyAll(remoteUser, msg, this.link);
     }
 }

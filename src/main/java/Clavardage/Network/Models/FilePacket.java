@@ -27,4 +27,6 @@ public class FilePacket extends MessagePacket {
     public InputStream getFileStream() { return this.fileStream; }
     public long getFileLength() { return this.fileLength; }
     public String getFileName() { return fileName; }
+
+    public void setFileName(String fileName) { this.fileName = fileName; }
 }

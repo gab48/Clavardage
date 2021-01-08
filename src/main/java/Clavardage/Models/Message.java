@@ -8,7 +8,7 @@ import java.util.Date;
 
 public class Message implements Serializable {
 
-    public enum MessageType { TEXT, FILE }
+    public enum MessageType { TEXT, FILE, FILE_ACK }
 
     private MessageType type;
     private String content;

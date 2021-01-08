@@ -1,3 +1,5 @@
 package Clavardage.Managers;
 
-public interface Manager {}
+public interface Manager {
+    void stop();
+}

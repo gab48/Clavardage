@@ -69,4 +69,10 @@ public class UsersManager implements Manager, Observable {
             l.handle(args);
         }
     }
+
+    @Override
+    public void stop() {
+        //TODO : Send disconnect
+        CCPListenerPool.run=false;
+    }
 }

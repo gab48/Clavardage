@@ -8,6 +8,7 @@ import Clavardage.Utils.Config;
 public class MsgListenerPool extends ListenerPool {
 
     private final TCPRecvSocket srvSock;
+    public static volatile boolean run = true;
 
     public MsgListenerPool() {
         super(Integer.parseInt(Config.get("MSG_LISTENER_POOL_SIZE")));
@@ -15,19 +16,18 @@ public class MsgListenerPool extends ListenerPool {
     }
 
     @Override
-    @SuppressWarnings("InfiniteLoopStatement")
     public void run() {
         int handlerId = 0;
         MsgPacketHandler currentHandler;
         System.out.println("MsgListenerPool running...");
 
         //TODO: Closing application => exit loop
-        while (true) {
+        while (run) {
             handlerId++;
             MessagePacket recvPacket = new MessagePacket();
             this.srvSock.accept();
-            recvPacket = (MessagePacket) this.srvSock.recv(recvPacket);
-            currentHandler = new MsgPacketHandler(handlerId, recvPacket);
+            recvPacket = this.srvSock.recv(recvPacket);
+            currentHandler = new MsgPacketHandler(handlerId, recvPacket, this.srvSock);
             this.pool.execute(currentHandler);
         }
     }

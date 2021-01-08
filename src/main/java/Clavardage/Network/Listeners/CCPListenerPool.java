@@ -8,20 +8,21 @@ import Clavardage.Utils.Config;
 public class CCPListenerPool extends ListenerPool {
 
     private final CCPsocket srvSock;
+    public static volatile boolean run = true;
 
     public CCPListenerPool() {
         super(Integer.parseInt(Config.get("CCP_LISTENER_POOL_SIZE")));
         this.srvSock = new CCPsocket(Short.parseShort(Config.get("NETWORK_UDP_SRV_PORT")));
     }
 
-    @SuppressWarnings("InfiniteLoopStatement")
+    @Override
     public void run() {
         int handlerId = 0;
         CCPPacketHandler currentHandler;
         System.out.println("CCPListenerPool running...");
 
         //TODO: Closing application => exit loop
-        while (true) {
+        while (run) {
             handlerId++;
             CCPPacket recvPacket = new CCPPacket();
             recvPacket = (CCPPacket) this.srvSock.recv(recvPacket);
