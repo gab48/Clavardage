@@ -7,7 +7,10 @@
     <groupId>INSA</groupId>
     <artifactId>Clavardage</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <modules>
+        <module>client-app</module>
+    </modules>
+    <packaging>pom</packaging>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -41,6 +44,7 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.21</version>
         </dependency>
+
     </dependencies>
 
     <build>

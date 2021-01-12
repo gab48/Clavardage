@@ -3,4 +3,4 @@
 /target
 /src/test/java/
 /src/test/files/
-.config
+client.config
