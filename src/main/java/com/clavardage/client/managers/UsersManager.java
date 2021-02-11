@@ -56,14 +56,14 @@ public class UsersManager implements Manager, Observable {
                 while(keys.hasNext()) {
                     String key = keys.next();
                     if (json.get(key) instanceof Integer) {
-                        User.UserStatus status = User.UserStatusToInt(json.getInt(key));
+                        User.UserStatus status = User.IntToUserStatus(json.getInt(key));
                         usersStatus.put(key, status);
                     }
                 }
 
                 for(User user : this.connectedUsers) {
                     if(usersStatus.containsKey(user.getAddress().toString())) {
-                        user.updateStatus(usersStatus.get(user.getAddress().toString()));
+                        user.setStatus(usersStatus.get(user.getAddress().toString()));
                     }
                 }
             } catch (InterruptedException ignore) {}

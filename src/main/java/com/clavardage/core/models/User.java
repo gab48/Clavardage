@@ -29,7 +29,7 @@ public class User {
     protected int status; // 1=Connected; 2=Idle; 3=Disconnected; 4=UNKNOWN
 
     public enum UserStatus {CONNECTED, IDLE, DISCONNECTED, UNKNOWN}
-    public static UserStatus UserStatusToInt(int status) {
+    public static UserStatus IntToUserStatus(int status) {
         UserStatus userStatus;
         switch (status) {
             case 1:
@@ -59,13 +59,22 @@ public class User {
     public String getNickname() {
         return nickname;
     }
-    public UserStatus getStatus() { return UserStatusToInt(this.status); }
+    public UserStatus getStatus() { return IntToUserStatus(this.status); }
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
 
     public void updateStatus(UserStatus status) {
+        this.setStatus(status);
+
+        // Notify servlet
+        StatusUpdateRequest request = new StatusUpdateRequest(Config.get("SERVLET_ADDR"),this.address.toString(),this.status);
+        request.executePost();
+        System.out.println(request.getResponse());
+    }
+
+    public void setStatus(UserStatus status) {
         switch (status) {
             case CONNECTED:
                 this.status = 1; break;
@@ -73,12 +82,9 @@ public class User {
                 this.status = 2; break;
             case DISCONNECTED:
                 this.status = 3; break;
+            default:
+                this.status = 4; break;
         }
-
-        // Notify servlet
-        StatusUpdateRequest request = new StatusUpdateRequest(Config.get("SERVLET_ADDR"),this.address.toString(),this.status);
-        request.executePost();
-        System.out.println(request.getResponse());
     }
 
     public void join(Conversation conv) {

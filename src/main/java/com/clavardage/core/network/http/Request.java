@@ -1,7 +1,5 @@
 package com.clavardage.core.network.http;
 
-import org.apache.commons.io.IOUtils;
-
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -33,10 +31,10 @@ public abstract class Request {
             output.write(this.query.getBytes(CHARSET));
 
             InputStream response = connection.getInputStream();
-            this.response = IOUtils.toString(response, CHARSET);
+            this.response = streamToString(response);
 
-
-
+            output.close();
+            response.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,10 +46,24 @@ public abstract class Request {
             connection.setRequestProperty("Accept-Charset", CHARSET);
             InputStream response = connection.getInputStream();
 
-            this.response = IOUtils.toString(response, CHARSET);
+            this.response = streamToString(response);
+
+            response.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String streamToString(InputStream is) {
+        int ch;
+        StringBuilder sb = new StringBuilder();
+        try {
+            while ((ch = is.read()) != -1)
+                sb.append((char) ch);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
     }
 
     public String getResponse() {
