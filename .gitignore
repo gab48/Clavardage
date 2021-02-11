@@ -1,7 +1,7 @@
 /.idea/
 /out
 /target
-/src/test/java/
-/src/test/files/
+/src/test/
 client.config
-/bin/tmp
+/src/main/webapp/WEB-INF/classes/.config
+/bin/*
