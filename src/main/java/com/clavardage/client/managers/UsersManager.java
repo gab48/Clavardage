@@ -10,7 +10,10 @@ import com.clavardage.core.observers.Observable;
 import com.clavardage.core.utils.Config;
 import org.json.JSONObject;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
@@ -44,29 +47,42 @@ public class UsersManager implements Manager, Observable {
 
     private void statusUpdater() {
         String url = Config.get("SERVLET_ADDR");
+        byte[] userStatusHash = null;
+        byte[] tmpHash;
         while (run) {
             try {
                 TimeUnit.SECONDS.sleep(10);
                 StatusSelectRequest request = new StatusSelectRequest(url);
                 request.executeGet();
-                JSONObject json = new JSONObject(request.getResponse().trim());
-                Iterator<String> keys = json.keys();
-                HashMap<String, User.UserStatus> usersStatus= new HashMap<>();
 
-                while(keys.hasNext()) {
-                    String key = keys.next();
-                    if (json.get(key) instanceof Integer) {
-                        User.UserStatus status = User.IntToUserStatus(json.getInt(key));
-                        usersStatus.put(key, status);
+                String result = request.getResponse().trim();
+                MessageDigest md5 = MessageDigest.getInstance("MD5");
+                tmpHash = md5.digest(result.getBytes());
+
+                if(!Arrays.equals(userStatusHash, tmpHash)) {
+                    userStatusHash = tmpHash;
+
+                    JSONObject json = new JSONObject(request.getResponse().trim());
+                    Iterator<String> keys = json.keys();
+                    HashMap<String, User.UserStatus> usersStatus = new HashMap<>();
+
+                    while (keys.hasNext()) {
+                        String key = keys.next();
+                        if (json.get(key) instanceof Integer) {
+                            User.UserStatus status = User.IntToUserStatus(json.getInt(key));
+                            usersStatus.put(key, status);
+                        }
+                    }
+
+                    for (User user : this.connectedUsers) {
+                        if (usersStatus.containsKey(user.getAddress().toString())) {
+                            user.setStatus(usersStatus.get(user.getAddress().toString()));
+                        }
                     }
                 }
-
-                for(User user : this.connectedUsers) {
-                    if(usersStatus.containsKey(user.getAddress().toString())) {
-                        user.setStatus(usersStatus.get(user.getAddress().toString()));
-                    }
-                }
-            } catch (InterruptedException ignore) {}
+            } catch (InterruptedException ignore) {} catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
         }
     }
 
