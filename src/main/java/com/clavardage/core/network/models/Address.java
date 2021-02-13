@@ -26,7 +26,7 @@ public class Address {
     }
 
     public Address(InetAddress addr) {
-        this(addr, Packet.DEFAULT_SRC_PORT);
+        this(addr, Short.parseShort(Config.get("NETWORK_CLAVARDAGE_PORT")));
     }
 
     public Address(String str) {

@@ -18,17 +18,17 @@ public class CCPPacketHandler extends PacketHandler<CCPPacket> {
         User remoteUser = this.packet.getUserFromCCP();
         if(remoteUser != null) {
             switch (this.packet.getType()) {
-                case 0: // DISCOVER package from a remoteUser
+                case 0: // DISCOVER packet from a remoteUser
                     if (!remoteUser.equals(User.localUser)) {
                         CCPController ccpController = new CCPController();
                         ccpController.sendReplyTo(remoteUser);
                         this.um.addConnectedUser(remoteUser);
                     }
                     break;
-                case 1: // REPLY package
+                case 1: // REPLY packet
                     this.um.addConnectedUser(remoteUser);
                     break;
-                case 2: // DELETE package
+                case 2: // DISCONNECT
                     this.um.removeConnectedUser(remoteUser);
                     break;
                 default:

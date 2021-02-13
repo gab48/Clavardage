@@ -112,16 +112,7 @@ public class ConversationPanel extends JPanel {
 
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-
-            FileSocket fs = new FileSocket();
-            Address remoteFileBuffer = new Address(this.remoteUser.getAddress().getIp(), Short.parseShort(Config.get("NETWORK_TCP_FILE_PORT")));
-            FilePacket filePacket = new FilePacket(file, remoteFileBuffer);
-            filePacket.setSrc(User.localUser.getAddress());
-            fs.connect(remoteFileBuffer);
-            fs.send(filePacket);
-            fs.close();
-
-            System.out.println("Sended file : " + file.getName() + ".");
+            conversationController.sendFile(file);
         } else {
             System.out.println("Open command cancelled by user.");
         }
@@ -131,13 +122,13 @@ public class ConversationPanel extends JPanel {
         ConversationsManager conversationsManager = ConversationsManager.getInstance();
         Conversation conversation = conversationsManager.getConversation(this.remoteUser.getAddress());
         History history = conversation.getHistory();
-        for (Message message : history.getMessagesHistory()) {
-            //System.out.printf("sender: %s\n", message.getSender());
-            //System.out.printf("local:  %s\n", User.localUser.getAddress().toString());
-            if (message.getSender().equals(User.localUser.getAddress().toString())) {
-                appendMessage(User.localUser, message);
-            } else {
-                appendMessage(this.remoteUser, message);
+        if (history != null) {
+            for (Message message : history.getMessagesHistory()) {
+                if (message.getSender().equals(User.localUser.getAddress().toString())) {
+                    appendMessage(User.localUser, message);
+                } else {
+                    appendMessage(this.remoteUser, message);
+                }
             }
         }
     }

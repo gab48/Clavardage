@@ -12,7 +12,7 @@ public class MsgListenerPool extends ListenerPool {
 
     public MsgListenerPool() {
         super(Integer.parseInt(Config.get("MSG_LISTENER_POOL_SIZE")));
-        this.srvSock = new TCPRecvSocket(Short.parseShort(Config.get("NETWORK_TCP_SRV_PORT")));
+        this.srvSock = new TCPRecvSocket(Short.parseShort(Config.get("NETWORK_CLAVARDAGE_PORT")));
     }
 
     @Override

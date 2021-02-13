@@ -9,21 +9,27 @@ import java.net.UnknownHostException;
 
 public class CCPPacket extends Packet {
 
-    private int type;
+    private int type; // 0=Discovery; 1=Reply; 2=Disconnect
+
+    private void setMulticastDestination() {
+        this.dest = Address.getMulticast();
+        if (this.dest != null) {
+            this.dest.setPort(Short.parseShort(Config.get("NETWORK_CLAVARDAGE_PORT")));
+        }
+    }
 
     public CCPPacket(CCPPacketType type, User user) {
         super();
         if (type == CCPPacketType.DISCOVER) {
             this.type = 0;
-            this.dest = Address.getMulticast();
-            if (this.dest != null) {
-                this.dest.setPort(Short.parseShort(Config.get("NETWORK_UDP_SRV_PORT")));
-            }
-            this.payload = user.getNickname()+'='+this.src.getIp().getHostAddress();
+            this.setMulticastDestination();
         } else if (type == CCPPacketType.REPLY) {
             this.type = 1;
-            this.payload = user.getNickname()+'='+this.src.getIp().getHostAddress();
+        } else if (type == CCPPacketType.DISCONNECT){
+            this.type = 2;
+            this.setMulticastDestination();
         }
+        this.payload = user.getNickname()+'='+this.src.getIp().getHostAddress();
     }
 
     public CCPPacket() { super(); }
@@ -31,7 +37,7 @@ public class CCPPacket extends Packet {
     public int getType() { return type; }
     public void setDestAddr (Address addr) {
         this.dest = addr;
-        this.dest.setPort(Short.parseShort(Config.get("NETWORK_UDP_SRV_PORT")));
+        this.dest.setPort(Short.parseShort(Config.get("NETWORK_CLAVARDAGE_PORT")));
     }
 
     @Override

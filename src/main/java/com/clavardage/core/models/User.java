@@ -2,6 +2,7 @@ package com.clavardage.core.models;
 
 import com.clavardage.core.database.queries.inserts.ParticipantInsertQuery;
 import com.clavardage.core.database.queries.QueryParameters;
+import com.clavardage.core.network.controllers.CCPController;
 import com.clavardage.core.network.http.StatusUpdateRequest;
 import com.clavardage.core.network.models.Address;
 import com.clavardage.core.utils.Config;
@@ -23,26 +24,49 @@ public class User {
         }
     }
 
-    protected int id;
-    protected final Address address;
-    protected String nickname;
-    protected int status; // 1=Connected; 2=Idle; 3=Disconnected; 4=UNKNOWN
+    public static void disconnectLocalUser() {
+        if (isLocalUserInstantiated) {
+            new CCPController().sendDisconnect();
+            updateLocalUserStatus(UserStatus.DISCONNECTED);
+        } else {
+            throw new IllegalStateException("Disconnect: localUser needs to be instantiated");
+        }
+    }
+
+    public static void connectLocalUser() {
+        if (isLocalUserInstantiated) {
+            new CCPController().sendDiscovery();
+            updateLocalUserStatus(UserStatus.CONNECTED);
+        } else {
+            throw new IllegalStateException("Connect: localUser needs to be instantiated");
+        }
+    }
 
     public enum UserStatus {CONNECTED, IDLE, DISCONNECTED, UNKNOWN}
+
     public static UserStatus IntToUserStatus(int status) {
         UserStatus userStatus;
         switch (status) {
-            case 1:
-                userStatus = UserStatus.CONNECTED; break;
-            case 2:
-                userStatus = UserStatus.IDLE; break;
-            case 3:
-                userStatus = UserStatus.DISCONNECTED; break;
-            default:
-                userStatus = UserStatus.UNKNOWN; break;
+            case 1: userStatus = UserStatus.CONNECTED; break;
+            case 2: userStatus = UserStatus.IDLE; break;
+            case 3: userStatus = UserStatus.DISCONNECTED; break;
+            default: userStatus = UserStatus.UNKNOWN; break;
         }
         return userStatus;
     }
+
+    public static void updateLocalUserStatus(UserStatus status) {
+        if (isLocalUserInstantiated) {
+            localUser.setStatus(status);
+
+            StatusUpdateRequest request = new StatusUpdateRequest(Config.get("SERVLET_ADDR"), localUser.address.toString(), localUser.status);
+            request.executePost();
+        }
+    }
+
+    protected final Address address;
+    protected String nickname;
+    protected int status; // 1=Connected; 2=Idle; 3=Disconnected; 4=UNKNOWN
 
     public User(String nickname, Address address) {
         this.nickname = nickname;
@@ -65,25 +89,12 @@ public class User {
         this.nickname = nickname;
     }
 
-    public void updateStatus(UserStatus status) {
-        this.setStatus(status);
-
-        // Notify servlet
-        StatusUpdateRequest request = new StatusUpdateRequest(Config.get("SERVLET_ADDR"),this.address.toString(),this.status);
-        request.executePost();
-        System.out.println(request.getResponse());
-    }
-
     public void setStatus(UserStatus status) {
         switch (status) {
-            case CONNECTED:
-                this.status = 1; break;
-            case IDLE:
-                this.status = 2; break;
-            case DISCONNECTED:
-                this.status = 3; break;
-            default:
-                this.status = 4; break;
+            case CONNECTED: this.status = 1; break;
+            case IDLE: this.status = 2; break;
+            case DISCONNECTED: this.status = 3; break;
+            default: this.status = 4; break;
         }
     }
 
@@ -122,8 +133,7 @@ public class User {
 
         User user = (User) o;
         return  Objects.equals(this.address, user.address)
-                && Objects.equals(this.nickname, user.nickname)
-                && Objects.equals(this.status, user.status);
+                && Objects.equals(this.nickname, user.nickname);
     }
 
     @Override

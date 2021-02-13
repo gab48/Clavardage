@@ -7,6 +7,7 @@ import com.clavardage.core.utils.Config;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
 import java.util.Objects;
@@ -14,7 +15,7 @@ import java.util.Objects;
 public class CCPsocket extends Socket<Packet>{
 
     protected static final int PAYLOAD_MAX_SIZE = 8192;
-    protected MulticastSocket socket;
+    protected DatagramSocket socket;
 
     public CCPsocket(short localPort) {
         super(localPort);
@@ -22,12 +23,14 @@ public class CCPsocket extends Socket<Packet>{
 
         try {
             if (this.localPort > 1024) {
-                this.socket = new MulticastSocket(this.localPort);
-                this.socket.joinGroup(new InetSocketAddress(Objects.requireNonNull(Address.getMulticast()).getIp(), Short.parseShort(Config.get("NETWORK_UDP_SRV_PORT"))), Address.getInterface());
-            } else if (this.localPort == 0) {
-                this.socket = new MulticastSocket();
+                if (Boolean.parseBoolean(Config.get("MULTICAST"))) {
+                    this.socket = new MulticastSocket(this.localPort);
+                    ((MulticastSocket) this.socket).joinGroup(new InetSocketAddress(Objects.requireNonNull(Address.getMulticast()).getIp(), Short.parseShort(Config.get("NETWORK_CLAVARDAGE_PORT"))), Address.getInterface());
+                } else {
+                    this.socket = new DatagramSocket(this.localPort);
+                }
             } else {
-                System.err.println("Please use a port >1024");
+                this.socket = new DatagramSocket();
             }
         } catch (IOException e) {
             e.printStackTrace();

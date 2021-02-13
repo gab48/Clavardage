@@ -22,20 +22,23 @@ public class UsersManager implements Manager, Observable {
     private static final UsersManager INSTANCE = new UsersManager();
     public static volatile boolean run = true;
 
-    private final ArrayList<User> connectedUsers = new ArrayList<>();
+    //private final ArrayList<User> connectedUsers = new ArrayList<>();
     private final ArrayList<Listener> listeners = new ArrayList<>();
+    private final HashMap<String, User> connectedUsers = new HashMap<>();
 
-    public ArrayList<User> getConnectedUsers() { return this.connectedUsers; }
+    public ArrayList<User> getConnectedUsers() {
+        return new ArrayList<>(connectedUsers.values());
+    }
 
     public void addConnectedUser(User u) {
-        if (!this.connectedUsers.contains(u)) {
-            this.connectedUsers.add(u);
+        if (!this.connectedUsers.containsKey(u.getAddress().toString())) {
+            this.connectedUsers.put(u.getAddress().toString(), u);
             this.notifyAll("add", u);
         }
     }
 
     public void removeConnectedUser(User u) {
-        this.connectedUsers.remove(u);
+        this.connectedUsers.remove(u.getAddress().toString());
         this.notifyAll("remove", u);
         System.out.println("Removing "+ u);
     }
@@ -74,7 +77,7 @@ public class UsersManager implements Manager, Observable {
                         }
                     }
 
-                    for (User user : this.connectedUsers) {
+                    for (User user : this.connectedUsers.values()) {
                         if (usersStatus.containsKey(user.getAddress().toString())) {
                             user.setStatus(usersStatus.get(user.getAddress().toString()));
                         }
@@ -88,7 +91,7 @@ public class UsersManager implements Manager, Observable {
 
     private UsersManager () {
         new Thread(new CCPListenerPool()).start();
-        new CCPController().sendDiscovery();
+        User.connectLocalUser();
 
         // Status Updater
         new Thread(this::statusUpdater).start();
@@ -99,7 +102,7 @@ public class UsersManager implements Manager, Observable {
     }
 
     public User getUser(Address address) {
-        for(User connectedUser : this.connectedUsers) {
+        for(User connectedUser : this.connectedUsers.values()) {
             if(connectedUser.getAddress().equals(address)) {
                 return connectedUser;
             }

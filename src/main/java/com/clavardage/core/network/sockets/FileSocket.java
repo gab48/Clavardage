@@ -44,7 +44,7 @@ public class FileSocket extends TCPsocket<FilePacket> {
 
     private void sendFileName(FilePacket packet) {
         String filename = packet.getFileName();
-        Address destination = new Address(packet.getDest().getIp(), Short.parseShort(Config.get("NETWORK_TCP_SRV_PORT")));
+        Address destination = new Address(packet.getDest().getIp(), Short.parseShort(Config.get("NETWORK_CLAVARDAGE_PORT")));
         Address source = packet.getSrc();
 
         Message filenameMessage = new Message(filename, (new Date()).getTime(), Message.MessageType.FILE);
@@ -95,7 +95,6 @@ public class FileSocket extends TCPsocket<FilePacket> {
     @Override
     public FilePacket recv(FilePacket packet) {
 
-        // TODO: Receive Filename
         String filename = packet.getFileName();
 
         try {

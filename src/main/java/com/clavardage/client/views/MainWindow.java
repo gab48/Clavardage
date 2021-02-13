@@ -107,6 +107,7 @@ public class MainWindow extends JFrame implements Listener {
     private void stop() {
         MessagesManager.getInstance().stop();
         UsersManager.getInstance().stop();
+        User.disconnectLocalUser();
     }
 
     private void removeConnectedUser(User u) {

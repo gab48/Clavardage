@@ -12,7 +12,7 @@ public class CCPListenerPool extends ListenerPool {
 
     public CCPListenerPool() {
         super(Integer.parseInt(Config.get("CCP_LISTENER_POOL_SIZE")));
-        this.srvSock = new CCPsocket(Short.parseShort(Config.get("NETWORK_UDP_SRV_PORT")));
+        this.srvSock = new CCPsocket(Short.parseShort(Config.get("NETWORK_CLAVARDAGE_PORT")));
     }
 
     @Override

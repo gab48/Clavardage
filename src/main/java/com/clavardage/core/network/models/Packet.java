@@ -2,8 +2,6 @@ package com.clavardage.core.network.models;
 
 public class Packet implements PacketBasics {
 
-    public static final short DEFAULT_SRC_PORT = 1921;
-
     protected String payload;
     protected Address dest;
     protected Address src;

@@ -4,4 +4,5 @@
 /src/test/
 client.config
 /src/main/webapp/WEB-INF/classes/.config
-/bin/*
+/bin/tmp
+/bin/client.config
