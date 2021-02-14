@@ -45,7 +45,9 @@ public class MainWindow extends JFrame implements Listener {
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() >= 2) {
                     User remoteUser = connectedUsersList.getSelectedValue();
-                    displayConversation(remoteUser);
+                    if (remoteUser != null) {
+                        displayConversation(remoteUser);
+                    }
                 }
             }
         });
