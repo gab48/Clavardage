@@ -67,7 +67,7 @@ public class MainWindow extends JFrame implements Listener {
         statusTitle.add(statusLabel);
         statusTitle.setMaximumSize(statusTitle.getPreferredSize());
 
-        String[] statuses = {"Online", "Idle", "Invisible"};
+        String[] statuses = {"Online", "Away", "Invisible"};
         JComboBox<String> statusList = new JComboBox<>(statuses);
         //statusList.setSelectedIndex(0);
         statusList.addActionListener(e -> {
@@ -76,7 +76,7 @@ public class MainWindow extends JFrame implements Listener {
 
             HashMap<String, User.UserStatus> statusMap = new HashMap<>();
             statusMap.put("Online", User.UserStatus.CONNECTED);
-            statusMap.put("Idle", User.UserStatus.IDLE);
+            statusMap.put("Away", User.UserStatus.IDLE);
             statusMap.put("Invisible", User.UserStatus.DISCONNECTED);
 
             User.UserStatus selectedStatus = statusMap.get(selectedString);
@@ -88,7 +88,7 @@ public class MainWindow extends JFrame implements Listener {
                 return;
             }
 
-            SwingUtilities.invokeLater(() -> {
+            new Thread(() -> {
                 if (selectedStatus.equals(User.UserStatus.DISCONNECTED)) {
                     User.disconnectLocalUser();
                 } else if (currentStatus.equals(User.UserStatus.DISCONNECTED)) {
@@ -96,7 +96,7 @@ public class MainWindow extends JFrame implements Listener {
                     User.connectLocalUser();
                 }
                 User.updateLocalUserStatus(selectedStatus);
-            });
+            }).start();
         });
         statusList.setMaximumSize(new Dimension(200, 30));
         statusList.setPreferredSize(new Dimension(200, 30));
@@ -145,10 +145,11 @@ public class MainWindow extends JFrame implements Listener {
         this.conversations.focusConversation(remoteUser);
     }
 
-    private void addConnectedUser(User u) {
-        if (!this.listModel.contains(u)) {
-            SwingUtilities.invokeLater(() -> this.listModel.addElement(u));
-        }
+    public void refreshConnectedUsersList() {
+        SwingUtilities.invokeLater(() -> {
+            this.listModel.removeAllElements();
+            this.listModel.addAll(UsersManager.getInstance().getConnectedUsers());
+        });
     }
 
     private void stop() {
@@ -158,21 +159,8 @@ public class MainWindow extends JFrame implements Listener {
         User.updateLocalUserStatus(User.UserStatus.DISCONNECTED);
     }
 
-    private void removeConnectedUser(User u) {
-        SwingUtilities.invokeLater(() -> this.listModel.removeElement(u));
-    }
-
     @Override
     public void handle(Object... args) {
-        String operation = (String) args[0];
-        User user = (User) args[1];
-
-        if (operation.equals("add")) {
-            this.addConnectedUser(user);
-        } else if (operation.equals("remove")) {
-            this.removeConnectedUser(user);
-        } else {
-            System.err.println("MainWindow.handle(): unknown operation");
-        }
+        this.refreshConnectedUsersList();
     }
 }

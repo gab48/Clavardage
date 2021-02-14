@@ -120,7 +120,11 @@ public class User {
 
     @Override
     public String toString() {
-        return this.nickname;
+        if (this.getStatus().equals(UserStatus.IDLE)) {
+            return this.nickname + " (away)";
+        } else {
+            return this.nickname;
+        }
     }
 
     @Override

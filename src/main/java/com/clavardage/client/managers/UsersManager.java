@@ -33,14 +33,13 @@ public class UsersManager implements Manager, Observable {
     public void addConnectedUser(User u) {
         if (!this.connectedUsers.containsKey(u.getAddress().toString())) {
             this.connectedUsers.put(u.getAddress().toString(), u);
-            this.notifyAll("add", u);
+            this.notifyAll((Object) null);
         }
     }
 
     public void removeConnectedUser(User u) {
         this.connectedUsers.remove(u.getAddress().toString());
-        this.notifyAll("remove", u);
-        System.out.println("Removing "+ u);
+        this.notifyAll((Object) null);
     }
 
     public void showList() {
@@ -83,6 +82,7 @@ public class UsersManager implements Manager, Observable {
                         }
                     }
                 }
+                this.notifyAll((Object) null);
             } catch (InterruptedException ignore) {} catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
