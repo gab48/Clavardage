@@ -8,6 +8,7 @@ import com.clavardage.core.observers.Listener;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.HashMap;
 
 public class MainWindow extends JFrame implements Listener {
 
@@ -61,10 +62,54 @@ public class MainWindow extends JFrame implements Listener {
         listTitle.add(listLabel);
         listTitle.setMaximumSize(listTitle.getPreferredSize());
 
-        JPanel listPanel = new JPanel();
-        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.PAGE_AXIS));
-        listPanel.add(listTitle);
-        listPanel.add(listScroll);
+        JLabel statusLabel = new JLabel("<html><body><b>Status:</b></body></html>");
+        JPanel statusTitle = new JPanel();
+        statusTitle.add(statusLabel);
+        statusTitle.setMaximumSize(statusTitle.getPreferredSize());
+
+        String[] statuses = {"Online", "Idle", "Invisible"};
+        JComboBox<String> statusList = new JComboBox<>(statuses);
+        //statusList.setSelectedIndex(0);
+        statusList.addActionListener(e -> {
+            JComboBox<String> comboBox = (JComboBox<String>) e.getSource();
+            String selectedString = (String) comboBox.getSelectedItem();
+
+            HashMap<String, User.UserStatus> statusMap = new HashMap<>();
+            statusMap.put("Online", User.UserStatus.CONNECTED);
+            statusMap.put("Idle", User.UserStatus.IDLE);
+            statusMap.put("Invisible", User.UserStatus.DISCONNECTED);
+
+            User.UserStatus selectedStatus = statusMap.get(selectedString);
+
+            User.UserStatus currentStatus = User.localUser.getStatus();
+
+            if (selectedStatus.equals(currentStatus)
+                    || currentStatus.equals(User.UserStatus.UNKNOWN)) {
+                return;
+            }
+
+            SwingUtilities.invokeLater(() -> {
+                if (selectedStatus.equals(User.UserStatus.DISCONNECTED)) {
+                    User.disconnectLocalUser();
+                } else if (currentStatus.equals(User.UserStatus.DISCONNECTED)) {
+                    // selectedStatus can only be CONNECTED or IDLE
+                    User.connectLocalUser();
+                }
+                User.updateLocalUserStatus(selectedStatus);
+            });
+        });
+        statusList.setMaximumSize(new Dimension(200, 30));
+        statusList.setPreferredSize(new Dimension(200, 30));
+        JPanel statusPanel = new JPanel();
+        statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.LINE_AXIS));
+        statusPanel.add(statusTitle);
+        statusPanel.add(statusList);
+
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.PAGE_AXIS));
+        leftPanel.add(listTitle);
+        leftPanel.add(listScroll);
+        leftPanel.add(statusPanel);
 
         JPanel subPanel = new JPanel();
         subPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
@@ -74,7 +119,7 @@ public class MainWindow extends JFrame implements Listener {
 
         JPanel entirePanel = new JPanel();
         entirePanel.setLayout(new BoxLayout(entirePanel, BoxLayout.LINE_AXIS));
-        entirePanel.add(listPanel);
+        entirePanel.add(leftPanel);
         entirePanel.add(subPanel);
 
         this.addWindowListener(new WindowAdapter() {
@@ -110,6 +155,7 @@ public class MainWindow extends JFrame implements Listener {
         MessagesManager.getInstance().stop();
         UsersManager.getInstance().stop();
         User.disconnectLocalUser();
+        User.updateLocalUserStatus(User.UserStatus.DISCONNECTED);
     }
 
     private void removeConnectedUser(User u) {

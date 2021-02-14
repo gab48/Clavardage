@@ -27,7 +27,6 @@ public class User {
     public static void disconnectLocalUser() {
         if (isLocalUserInstantiated) {
             new CCPController().sendDisconnect();
-            updateLocalUserStatus(UserStatus.DISCONNECTED);
         } else {
             throw new IllegalStateException("Disconnect: localUser needs to be instantiated");
         }
@@ -36,7 +35,6 @@ public class User {
     public static void connectLocalUser() {
         if (isLocalUserInstantiated) {
             new CCPController().sendDiscovery();
-            updateLocalUserStatus(UserStatus.CONNECTED);
         } else {
             throw new IllegalStateException("Connect: localUser needs to be instantiated");
         }

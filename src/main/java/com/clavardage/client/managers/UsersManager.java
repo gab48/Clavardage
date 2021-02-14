@@ -92,6 +92,7 @@ public class UsersManager implements Manager, Observable {
     private UsersManager () {
         new Thread(new CCPListenerPool()).start();
         User.connectLocalUser();
+        User.updateLocalUserStatus(User.UserStatus.CONNECTED);
 
         // Status Updater
         new Thread(this::statusUpdater).start();
