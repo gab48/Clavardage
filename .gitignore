@@ -6,3 +6,4 @@ client.config
 /src/main/webapp/WEB-INF/classes/.config
 /bin/tmp
 /bin/client.config
+/tmp

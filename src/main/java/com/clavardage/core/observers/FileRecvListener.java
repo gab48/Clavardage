@@ -23,9 +23,9 @@ public class FileRecvListener implements Listener{
             FilePacket filePacket = new FilePacket();
             filePacket.setFileName(msg.getContent());
 
-            FileSocket fileSocket = new FileSocket(Short.parseShort(Config.get("NETWORK_CLAVARDAGE_PORT")));
+            FileSocket fileSocket = new FileSocket(Short.parseShort(Config.get("NETWORK_FILE_TRANSFERT_PORT")));
 
-            new Thread( () -> {
+            new Thread(() -> {
                 fileSocket.accept();
                 fileSocket.recv(filePacket);
                 fileSocket.close();
