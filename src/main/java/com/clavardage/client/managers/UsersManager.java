@@ -40,7 +40,6 @@ public class UsersManager implements Manager, Observable {
     public void removeConnectedUser(User u) {
         this.connectedUsers.remove(u.getAddress().toString());
         this.notifyAll("remove", u);
-        System.out.println("Removing "+ u);
     }
 
     public void showList() {
