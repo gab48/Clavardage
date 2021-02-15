@@ -3,14 +3,15 @@
 ## Manuel d'installation
 
 ### Installation du client
-- Récupérer le fichier **clavardage.jar**
-- Créer un fichier **client.config** dans le même dossier que le fichier clavardage.jar. Voir le fichier **client.config.example**, et un fichier valide permettant d'utiliser une base de données et un servlet hébergés en permanence a été envoyé par mail à M.~Yangui.
-- Executer **clavardage.jar**
-- Entrer un pseudonyme dans la fenêtre qui s'affiche et valider
-- La fenêtre principale devrait alors apparaître.
+1. Récupérer le fichier **clavardage.jar**
+2. Créer un fichier **client.config** dans le même dossier que le fichier clavardage.jar. Voir le fichier **client.config.example**, et un fichier valide permettant d'utiliser une base de données et un servlet hébergés en permanence a été envoyé par mail à M.~Yangui.
+3. Executer **clavardage.jar**
+4. Entrer un pseudonyme dans la fenêtre qui s'affiche et valider
+
+La fenêtre principale devrait alors apparaître.
 ![image](MainWindow.png)
-### Base de donnée
-La structure de la bdd est disponible dans le fichier **database/clavardage.sql**. Ensuite vous devez définir un utilisateur qui puisse accéder à la base de donnée depuis un client distant.
+### Base de données
+La structure de la base de données est disponible dans le fichier **database/clavardage.sql**. Ensuite vous devez définir un utilisateur qui puisse accéder à la base de données depuis un client distant.
 ```shell
 MariaDB [(none)]> create user '<username>'@'%' identified by '<password>';
 ```
