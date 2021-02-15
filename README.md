@@ -1,5 +1,9 @@
 # Clavardage
 
+## Rapport du projet
+
+Le rapport du projet est disponible à la racine du dépôt, nommé [rapport.pdf](https://github.com/gab48/Clavardage/blob/master/rapport.pdf).
+
 ## Manuel d'installation
 
 ### Installation du client
