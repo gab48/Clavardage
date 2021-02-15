@@ -23,7 +23,7 @@ public class FileRecvListener implements Listener{
             FilePacket filePacket = new FilePacket();
             filePacket.setFileName(msg.getContent());
 
-            FileSocket fileSocket = new FileSocket(Short.parseShort(Config.get("NETWORK_FILE_TRANSFERT_PORT")));
+            FileSocket fileSocket = new FileSocket(Config.getShort("NETWORK_FILE_TRANSFERT_PORT"));
 
             new Thread(() -> {
                 fileSocket.accept();

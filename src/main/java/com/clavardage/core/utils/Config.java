@@ -1,5 +1,8 @@
 package com.clavardage.core.utils;
 
+import com.clavardage.client.views.AlertWindow;
+import com.clavardage.client.views.MainWindow;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -28,11 +31,49 @@ public class Config {
         this.conf = properties;
     }
 
-    public static String get(String key) {
-        return INSTANCE.getConfig().getProperty(key);
+    private static String get(String key) {
+        String result = INSTANCE.getConfig().getProperty(key);
+        if (result == null) {
+            Config.error(key);
+        }
+        return result;
+    }
+
+    public static String getString(String key) {
+        return Config.get(key);
     }
 
     public static Config getInstance() {
         return INSTANCE;
+    }
+
+    public static Boolean getBoolean(String key) {
+        return Boolean.parseBoolean(Config.get(key));
+    }
+
+    public static Short getShort(String key) {
+        try {
+            return Short.parseShort(Config.get(key));
+        } catch (NumberFormatException e) {
+            Config.error(key);
+            return 0; // Unreachable code
+        }
+    }
+
+    public static Integer getInteger(String key) {
+        try {
+            return Integer.parseInt(Config.get(key));
+        } catch (NumberFormatException e) {
+            Config.error(key);
+            return 0; // Unreachable code
+        }
+    }
+
+    public static void error(String key) {
+        AlertWindow.displayError("The client.config file is not correct (especially the "
+                + key + " parameter).\n" +
+                "(An email was sent to M. Yangui with a valid config file attached," +
+                "allowing to use some always-running database and servlet)");
+       System.exit(1);
     }
 }

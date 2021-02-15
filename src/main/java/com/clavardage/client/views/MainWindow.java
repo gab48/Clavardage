@@ -69,7 +69,6 @@ public class MainWindow extends JFrame implements Listener {
 
         String[] statuses = {"Online", "Away", "Invisible"};
         JComboBox<String> statusList = new JComboBox<>(statuses);
-        //statusList.setSelectedIndex(0);
         statusList.addActionListener(e -> {
             JComboBox<String> comboBox = (JComboBox<String>) e.getSource();
             String selectedString = (String) comboBox.getSelectedItem();
@@ -152,7 +151,7 @@ public class MainWindow extends JFrame implements Listener {
         });
     }
 
-    private void stop() {
+    public void stop() {
         MessagesManager.getInstance().stop();
         UsersManager.getInstance().stop();
         User.disconnectLocalUser();

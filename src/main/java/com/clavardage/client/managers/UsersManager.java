@@ -1,7 +1,6 @@
 package com.clavardage.client.managers;
 
 import com.clavardage.core.models.User;
-import com.clavardage.core.network.controllers.CCPController;
 import com.clavardage.core.network.http.StatusSelectRequest;
 import com.clavardage.core.network.listeners.CCPListenerPool;
 import com.clavardage.core.network.models.Address;
@@ -48,7 +47,7 @@ public class UsersManager implements Manager, Observable {
     }
 
     private void statusUpdater() {
-        String url = Config.get("SERVLET_ADDR");
+        String url = Config.getString("SERVLET_ADDR");
         byte[] userStatusHash = null;
         byte[] tmpHash;
         while (run) {

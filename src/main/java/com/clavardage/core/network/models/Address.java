@@ -1,5 +1,6 @@
 package com.clavardage.core.network.models;
 
+import com.clavardage.client.views.AlertWindow;
 import com.clavardage.core.utils.Config;
 
 import java.io.IOException;
@@ -26,7 +27,7 @@ public class Address {
     }
 
     public Address(InetAddress addr) {
-        this(addr, Short.parseShort(Config.get("NETWORK_CLAVARDAGE_PORT")));
+        this(addr, Config.getShort("NETWORK_CLAVARDAGE_PORT"));
     }
 
     public Address(String str) {
@@ -37,9 +38,14 @@ public class Address {
         try {
             InetAddress ip = InetAddress.getLocalHost();
             if (ip.isLoopbackAddress()) { //TODO: Find a better way
-                Socket s = new Socket("8.8.8.8", 53);
-                ip = s.getLocalAddress();
-                s.close();
+                try {
+                    Socket s = new Socket("8.8.8.8", 53);
+                    ip = s.getLocalAddress();
+                    s.close();
+                } catch (NoRouteToHostException e) {
+                    AlertWindow.displayError("No Internet connection");
+                    System.exit(1);
+                }
             }
             return new Address(ip);
         } catch (IOException e) {
@@ -49,9 +55,9 @@ public class Address {
     }
 
     public static Address getMulticast() {
-        if (Boolean.parseBoolean(Config.get("MULTICAST"))) {
+        if (Config.getBoolean("MULTICAST")) {
             try {
-                return new Address(InetAddress.getByName(Config.get("MULTICAST_GROUP")));
+                return new Address(InetAddress.getByName(Config.getString("MULTICAST_GROUP")));
             } catch (UnknownHostException e) {
                 e.printStackTrace();
             }

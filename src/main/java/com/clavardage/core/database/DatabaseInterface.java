@@ -1,5 +1,6 @@
 package com.clavardage.core.database;
 
+import com.clavardage.client.views.AlertWindow;
 import com.clavardage.core.utils.Config;
 
 import java.sql.*;
@@ -22,9 +23,9 @@ public class DatabaseInterface {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        DB_URI = "jdbc:mysql://" + Config.get("DB_ADDR") + ":" + Config.get("DB_PORT") + "/" + Config.get("DB_DATABASE");
-        LOGIN = Config.get("DB_LOGIN");
-        PASSWD = Config.get("DB_PASSWORD");
+        DB_URI = "jdbc:mysql://" + Config.getString("DB_ADDR") + ":" + Config.getString("DB_PORT") + "/" + Config.getString("DB_DATABASE");
+        LOGIN = Config.getString("DB_LOGIN");
+        PASSWD = Config.getString("DB_PASSWORD");
     }
 
     public void connect() throws DatabaseException {
@@ -34,7 +35,11 @@ public class DatabaseInterface {
         try {
             this.connection = DriverManager.getConnection(DB_URI, LOGIN, PASSWD);
         } catch (SQLException throwables) {
-            throw new DatabaseException("unable to connect to database : "+DB_URI+" "+LOGIN+" "+PASSWD);
+            AlertWindow.displayError("Unable to connect to database:\n" +
+                    "Host: " + DB_URI + "\n" +
+                    "Login: " + LOGIN + "\n" +
+                    "Password: " + PASSWD);
+            System.exit(1);
         }
     }
 

@@ -1,9 +1,13 @@
 package com.clavardage.core.network.http;
 
+import com.clavardage.client.views.AlertWindow;
+import com.clavardage.core.utils.Config;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.UnknownHostException;
 
 public abstract class Request {
 
@@ -35,6 +39,9 @@ public abstract class Request {
 
             output.close();
             response.close();
+        } catch (UnknownHostException e) {
+            AlertWindow.displayError("Unable to access servlet at address " + Config.getString("SERVLET_ADDR"));
+            System.exit(1);
         } catch (IOException e) {
             e.printStackTrace();
         }

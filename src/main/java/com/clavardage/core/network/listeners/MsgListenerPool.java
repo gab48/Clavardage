@@ -11,8 +11,8 @@ public class MsgListenerPool extends ListenerPool {
     public static volatile boolean run = true;
 
     public MsgListenerPool() {
-        super(Integer.parseInt(Config.get("MSG_LISTENER_POOL_SIZE")));
-        this.srvSock = new TCPRecvSocket(Short.parseShort(Config.get("NETWORK_CLAVARDAGE_PORT")));
+        super(Config.getInteger("MSG_LISTENER_POOL_SIZE"));
+        this.srvSock = new TCPRecvSocket(Config.getShort("NETWORK_CLAVARDAGE_PORT"));
     }
 
     @Override

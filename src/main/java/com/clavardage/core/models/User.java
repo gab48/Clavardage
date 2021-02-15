@@ -57,7 +57,7 @@ public class User {
         if (isLocalUserInstantiated) {
             localUser.setStatus(status);
 
-            StatusUpdateRequest request = new StatusUpdateRequest(Config.get("SERVLET_ADDR"), localUser.address.toString(), localUser.status);
+            StatusUpdateRequest request = new StatusUpdateRequest(Config.getString("SERVLET_ADDR"), localUser.address.toString(), localUser.status);
             request.executePost();
         }
     }

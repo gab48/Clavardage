@@ -14,7 +14,7 @@ public class CCPPacket extends Packet {
     private void setMulticastDestination() {
         this.dest = Address.getMulticast();
         if (this.dest != null) {
-            this.dest.setPort(Short.parseShort(Config.get("NETWORK_CLAVARDAGE_PORT")));
+            this.dest.setPort(Config.getShort("NETWORK_CLAVARDAGE_PORT"));
         }
     }
 
@@ -37,7 +37,7 @@ public class CCPPacket extends Packet {
     public int getType() { return type; }
     public void setDestAddr (Address addr) {
         this.dest = addr;
-        this.dest.setPort(Short.parseShort(Config.get("NETWORK_CLAVARDAGE_PORT")));
+        this.dest.setPort(Config.getShort("NETWORK_CLAVARDAGE_PORT"));
     }
 
     @Override

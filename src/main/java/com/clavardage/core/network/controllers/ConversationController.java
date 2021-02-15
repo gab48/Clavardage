@@ -36,7 +36,7 @@ public class ConversationController {
 
     public void sendFile(File file) {
         FileSocket fs = new FileSocket();
-        Address remoteFileBuffer = new Address(this.remoteUser.getAddress().getIp(), Short.parseShort(Config.get("NETWORK_FILE_TRANSFERT_PORT")));
+        Address remoteFileBuffer = new Address(this.remoteUser.getAddress().getIp(), Config.getShort("NETWORK_FILE_TRANSFERT_PORT"));
         FilePacket filePacket = new FilePacket(file, remoteFileBuffer);
         filePacket.setSrc(User.localUser.getAddress());
         fs.connect(remoteFileBuffer);

@@ -11,8 +11,8 @@ public class CCPListenerPool extends ListenerPool {
     public static volatile boolean run = true;
 
     public CCPListenerPool() {
-        super(Integer.parseInt(Config.get("CCP_LISTENER_POOL_SIZE")));
-        this.srvSock = new CCPsocket(Short.parseShort(Config.get("NETWORK_CLAVARDAGE_PORT")));
+        super(Config.getInteger("CCP_LISTENER_POOL_SIZE"));
+        this.srvSock = new CCPsocket(Config.getShort("NETWORK_CLAVARDAGE_PORT"));
     }
 
     @Override

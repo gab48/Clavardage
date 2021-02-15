@@ -1,5 +1,6 @@
 package com.clavardage.core.network.sockets;
 
+import com.clavardage.client.views.AlertWindow;
 import com.clavardage.core.models.Message;
 import com.clavardage.core.network.models.Address;
 import com.clavardage.core.network.models.FilePacket;
@@ -44,7 +45,7 @@ public class FileSocket extends TCPsocket<FilePacket> {
 
     private void sendFileName(FilePacket packet) {
         String filename = packet.getFileName();
-        Address destination = new Address(packet.getDest().getIp(), Short.parseShort(Config.get("NETWORK_CLAVARDAGE_PORT")));
+        Address destination = new Address(packet.getDest().getIp(), Config.getShort("NETWORK_CLAVARDAGE_PORT"));
         Address source = packet.getSrc();
 
         Message filenameMessage = new Message(filename, (new Date()).getTime(), Message.MessageType.FILE);
@@ -100,7 +101,7 @@ public class FileSocket extends TCPsocket<FilePacket> {
         try {
             this.fileStreams = new FileStreams(
                     this.link.getInputStream(),
-                    new FileOutputStream(Config.get("FILE_DIRECTORY")+filename));
+                    new FileOutputStream(Config.getString("FILE_DIRECTORY") + filename));
 
             byte[] bytes = new byte[1024];
 
@@ -108,6 +109,10 @@ public class FileSocket extends TCPsocket<FilePacket> {
             while ((count = this.fileStreams.getInputStream().read(bytes)) > 0) {
                 this.fileStreams.getOutputStream().write(bytes, 0, count);
             }
+        } catch (FileNotFoundException e) {
+            AlertWindow.displayError("The FILE_DIRECTORY parameter from the client.config file " +
+                    "does not point to an accessible or writable directory.");
+            System.exit(1);
         } catch (IOException ex) {
             ex.printStackTrace();
         }

@@ -23,9 +23,9 @@ public class CCPsocket extends Socket<Packet>{
 
         try {
             if (this.localPort > 1024) {
-                if (Boolean.parseBoolean(Config.get("MULTICAST"))) {
+                if (Config.getBoolean("MULTICAST")) {
                     this.socket = new MulticastSocket(this.localPort);
-                    ((MulticastSocket) this.socket).joinGroup(new InetSocketAddress(Objects.requireNonNull(Address.getMulticast()).getIp(), Short.parseShort(Config.get("NETWORK_CLAVARDAGE_PORT"))), Address.getInterface());
+                    ((MulticastSocket) this.socket).joinGroup(new InetSocketAddress(Objects.requireNonNull(Address.getMulticast()).getIp(), Config.getShort("NETWORK_CLAVARDAGE_PORT")), Address.getInterface());
                 } else {
                     this.socket = new DatagramSocket(this.localPort);
                 }
