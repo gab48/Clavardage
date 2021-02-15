@@ -46,8 +46,6 @@ public class TabbedConversations extends JTabbedPane implements Listener {
     public void handle(Object... args) {
         User remoteUser = (User) args[0];
         Message message = (Message) args[1];
-        if (message.getType().equals(Message.MessageType.TEXT)) {
-            this.getConversation(remoteUser).receiveMessage(message);
-        }
+        this.getConversation(remoteUser).receiveMessage(message);
     }
 }

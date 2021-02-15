@@ -6,15 +6,15 @@ import com.clavardage.core.models.History;
 import com.clavardage.core.models.Message;
 import com.clavardage.core.models.User;
 import com.clavardage.core.network.controllers.ConversationController;
-import com.clavardage.core.network.models.Address;
-import com.clavardage.core.network.models.FilePacket;
-import com.clavardage.core.network.sockets.FileSocket;
 import com.clavardage.core.utils.Config;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 
 public class ConversationPanel extends JPanel {
     private static final String SEND_TEXT_FIELD_PLACEHOLDER = "Type a message...";
@@ -42,19 +42,22 @@ public class ConversationPanel extends JPanel {
 
         this.sendTextField = new JTextField("Type a message...");
         this.defaultText = true;
-        JButton sendButton = new JButton("Send");
-        JButton fileButton = new JButton("File");
+        JButton sendTextButton = new JButton("Send");
+        JButton sendFileButton = new JButton("\uD83D\uDCCE"); // Unicode clip
+        JButton filesFolderButton = new JButton("Files");
 
         JPanel sendPanel = new JPanel();
         sendPanel.setLayout(new BoxLayout(sendPanel, BoxLayout.LINE_AXIS));
         sendPanel.add(this.sendTextField);
-        sendPanel.add(sendButton);
-        sendPanel.add(fileButton);
+        sendPanel.add(sendTextButton);
+        sendPanel.add(sendFileButton);
+        sendPanel.add(filesFolderButton);
 
         this.add(sendPanel);
 
-        sendButton.addActionListener(e -> sendMessage());
-        fileButton.addActionListener(e -> chooseFile());
+        sendTextButton.addActionListener(e -> sendMessage());
+        sendFileButton.addActionListener(e -> sendFile());
+        filesFolderButton.addActionListener(e -> openFilesFolder());
 
         this.sendTextField.addFocusListener(new FocusAdapter() {
             @Override
@@ -106,15 +109,38 @@ public class ConversationPanel extends JPanel {
         }
     }
 
-    private void chooseFile() {
+    private void sendFile() {
+        UIManager.put("FileChooser.openButtonText", "Send");
+        UIManager.put("FileChooser.openButtonToolTipText", "Send selected file");
+        UIManager.put("FileChooser.cancelButtonToolTipText", "Abort file sending");
+
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Send file");
         int returnValue = fileChooser.showOpenDialog(this);
 
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             conversationController.sendFile(file);
+
+            Message message = new Message(
+                    User.localUser.getAddress().toString(),
+                    file.getName(),
+                    new Timestamp(new Date().getTime()),
+                    Message.MessageType.FILE);
+
+            this.appendMessage(User.localUser, message);
         } else {
             System.out.println("Open command cancelled by user.");
+        }
+    }
+
+    private void openFilesFolder() {
+        try {
+            Desktop.getDesktop().open(new File(Config.getString("FILE_DIRECTORY")));
+        } catch (IOException e) {
+            AlertWindow.displayError("The FILE_DIRECTORY parameter from the client.config file " +
+                "does not point to an accessible folder.");
+            System.exit(1);
         }
     }
 
@@ -134,13 +160,21 @@ public class ConversationPanel extends JPanel {
     }
 
     private void appendMessage(User sender, Message message) {
-        conversationTextArea.append("[" + message.getTime() + "] <" + sender.getNickname() + "> "
+        if (message.getType() == Message.MessageType.TEXT) {
+            this.conversationTextArea.append("[" + message.getTime() + "] <" + sender.getNickname() + "> "
                 + message.getContent() + "\n");
+        } else if (message.getType() == Message.MessageType.FILE) {
+            this.conversationTextArea.append("[" + message.getTime() + "] ");
+            if (sender.equals(this.remoteUser)) {
+                this.conversationTextArea.append(sender.getNickname() + " sent the file \"" + message.getContent() + "\".");
+            } else {
+                this.conversationTextArea.append("You sent the file \"" + message.getContent() + "\".");
+            }
+            this.conversationTextArea.append("\n");
+        }
     }
 
     public void receiveMessage(Message message) {
-        //TODO: Take care of the type message.getType()
-
         SwingUtilities.invokeLater(() -> appendMessage(remoteUser, message));
     }
 }

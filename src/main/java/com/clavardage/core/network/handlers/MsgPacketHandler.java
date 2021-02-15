@@ -26,13 +26,10 @@ public class MsgPacketHandler extends PacketHandler<MessagePacket>{
         Message msg = new Message();
         msg.unserialize(this.packet.serialize());
 
-        User remoteUser = null;
         for(User connectedUser : UsersManager.getInstance().getConnectedUsers()) {
             if (connectedUser.correspondTo(ConversationsManager.getInstance().getConversation(this.packet.getSrc()).getParticipants().get(1))) {
-                remoteUser = connectedUser;
+                this.notifyAll(connectedUser, msg, this.link);
             }
         }
-
-        this.notifyAll(remoteUser, msg, this.link);
     }
 }
