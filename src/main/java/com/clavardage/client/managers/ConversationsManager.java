@@ -16,6 +16,10 @@ public class ConversationsManager implements Manager {
     private final ArrayList<Conversation> startedConversations = new ArrayList<>();
 
     private ConversationsManager() {
+        this.updateStartedConversations();
+    }
+
+    private void updateStartedConversations() {
         ConversationsSelectQuery query = new ConversationsSelectQuery();
         QueryParameters parameters = new QueryParameters();
 
@@ -23,9 +27,13 @@ public class ConversationsManager implements Manager {
         query.prepare();
         query.setParameters(parameters);
         ResultSet resultSet = query.execute();
+
         try {
             while(resultSet.next()) {
-                this.startedConversations.add(new Conversation(resultSet.getInt("room_id")));
+                Conversation conversation = new Conversation(resultSet.getInt("room_id"));
+                if (!this.startedConversations.contains(conversation)) {
+                    this.startedConversations.add(conversation);
+                }
             }
             resultSet.close();
         } catch (SQLException e) {
@@ -48,6 +56,7 @@ public class ConversationsManager implements Manager {
     }
 
     public Conversation getConversation(Address remoteUserAddr) {
+        this.updateStartedConversations();
         for(Conversation conv : this.startedConversations) {
             if(conv.getParticipants().size() == 2) {
                 if(conv.getParticipants().get(1).getAddress().equals(remoteUserAddr)) {

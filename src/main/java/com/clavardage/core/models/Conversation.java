@@ -9,6 +9,7 @@ import com.clavardage.core.utils.Storable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Conversation implements Storable {
     private int id = -1;
@@ -73,5 +74,16 @@ public class Conversation implements Storable {
         query.setParameters(parameters);
         this.id = query.execute();
         query.close();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        if (this.getClass() != o.getClass()) return false;
+
+        Conversation conversation = (Conversation) o;
+
+        return this.id == conversation.id;
     }
 }
